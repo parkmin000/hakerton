@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import {
   BrowserRouter,
   Navigate,
@@ -24,8 +25,28 @@ import Home from './pages/Home'
 import './App.css'
 
 function AppRouter() {
+  const bgmRef = useRef(null)
+
+  useEffect(() => {
+    const audio = bgmRef.current
+    if (!audio) return undefined
+
+    const tryPlay = () => {
+      audio.play().catch(() => {})
+    }
+
+    // 자동재생이 막힌 브라우저에서도 첫 사용자 상호작용 후 재생 시작
+    window.addEventListener('pointerdown', tryPlay, { once: true })
+    window.addEventListener('keydown', tryPlay, { once: true })
+    return () => {
+      window.removeEventListener('pointerdown', tryPlay)
+      window.removeEventListener('keydown', tryPlay)
+    }
+  }, [])
+
   return (
     <BrowserRouter>
+      <audio ref={bgmRef} src="/effect.mp4" autoPlay loop preload="auto" hidden />
       <nav className="app-nav">
         <NavLink
           to="/minyoung"

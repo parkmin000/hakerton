@@ -33,6 +33,11 @@ function BeerPourGame() {
 
   const [waitingForNext, setWaitingForNext] = useState(false);
   const [countdown, setCountdown] = useState(0);
+  const enterSfxRef = useRef(null);
+  const pouringSfxRef = useRef(null);
+  const enterAudioCtxRef = useRef(null);
+  const enterGainRef = useRef(null);
+  const enterSourceReadyRef = useRef(false);
 
   // 빠르게 차오르게(초당 퍼센트 증가) - 대학생 앱용으로 더 빠르게
   const speed = useMemo(() => 60, []);
@@ -40,6 +45,19 @@ function BeerPourGame() {
   useEffect(() => {
     fillRef.current = fill;
   }, [fill]);
+
+  useEffect(() => {
+    const pouringAudio = pouringSfxRef.current;
+    if (!pouringAudio) return;
+
+    if (running) {
+      pouringAudio.currentTime = 0;
+      pouringAudio.play().catch(() => {});
+    } else {
+      pouringAudio.pause();
+      pouringAudio.currentTime = 0;
+    }
+  }, [running]);
 
   useEffect(() => {
     if (!running) {
@@ -83,6 +101,31 @@ function BeerPourGame() {
     setResult(null);
     setStage('playing');
     setTurn(0);
+
+    const enterAudio = enterSfxRef.current;
+    if (enterAudio) {
+      if (!enterSourceReadyRef.current) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          const ctx = new AudioContextClass();
+          const source = ctx.createMediaElementSource(enterAudio);
+          const gain = ctx.createGain();
+          // 일반 audio.volume 최대치(1.0)를 넘어 증폭
+          gain.gain.value = 2.5;
+          source.connect(gain);
+          gain.connect(ctx.destination);
+          enterAudioCtxRef.current = ctx;
+          enterGainRef.current = gain;
+          enterSourceReadyRef.current = true;
+        }
+      }
+      if (enterAudioCtxRef.current?.state === 'suspended') {
+        enterAudioCtxRef.current.resume().catch(() => {});
+      }
+      enterAudio.volume = 1;
+      enterAudio.currentTime = 0;
+      enterAudio.play().catch(() => {});
+    }
 
     setFill(0);
     fillRef.current = 0;
@@ -161,6 +204,8 @@ function BeerPourGame() {
 
   return (
     <section id="center">
+      <audio ref={enterSfxRef} src="/beer-enter.mp3" preload="auto" hidden />
+      <audio ref={pouringSfxRef} src="/beer-enter.mp3" preload="auto" loop hidden />
       <div className="beer-game-shell">
         <div className="beer-game-board" style={{ background: 'transparent', backdropFilter: 'none', WebkitBackdropFilter: 'none' }}>
           <div className="beer-game">
