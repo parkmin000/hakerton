@@ -5,14 +5,11 @@ import {
   Route,
   Routes,
 } from 'react-router-dom'
-import Home from './pages/Home'
-import GuessNumberGame from './pages/GuessNumberGame'
-import MoleGame from './pages/MoleGame'
-import StackGame from './pages/StackGame'
 import MinyoungPage from './pages/MinyoungPage'
 import MinyoungAlcoholCategory from './pages/MinyoungAlcoholCategory'
 import JieunPage from './pages/JieunPage'
 import YeonheePage from './pages/YeonheePage'
+import YeonheeAlcoholCategory from './pages/YeonheeAlcoholCategory'
 import BeerPourGame from './pages/BeerPourGame'
 import CampusMapGame from './pages/CampusMapGame'
 import WhiteMouseAvoidGame from './pages/WhiteMouseAvoidGame'
@@ -43,9 +40,21 @@ function AppRouter() {
           end
           className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
         >
+          지은님
+        </NavLink>
+        <NavLink
+          to="/games/guess/jieun2"
+          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+        >
+          지은2님
+        </NavLink>
+        <NavLink
+          to="/games/guess/yeonhee"
+          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+        >
+          연희님
           연희 페이지
         </NavLink>
-       
       </nav>
 
       <Routes>
@@ -63,12 +72,8 @@ function AppRouter() {
           element={<JiEun2Game />}
         />
         <Route
-          path="/games/mole"
-          element={<MoleGame />}
-        />
-        <Route
-          path="/games/stack"
-          element={<StackGame />}
+          path="/games/guess/yeonhee"
+          element={<GuessNumberGame playerId="yeonhee" playerName="연희님" />}
         />
         <Route path="/" element={<Navigate to="/minyoung" replace />} />
 
@@ -84,10 +89,13 @@ function AppRouter() {
         <Route path="/jieun/credit" element={<CreditGame />} />
 
         <Route path="/yeonhee" element={<YeonheePage />} />
+        <Route path="/yeonhee/alcohol" element={<YeonheeAlcoholCategory />} />
+        <Route path="/yeonhee/alcohol/beer" element={<BeerPourGame />} />
 
         {/* 예전 경로 호환 */}
         <Route path="/games/guess/minyoung" element={<Navigate to="/minyoung" replace />} />
         <Route path="/games/guess/jieun" element={<Navigate to="/jieun" replace />} />
+        <Route path="/games/guess/yeonhee" element={<Navigate to="/yeonhee" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
@@ -95,3 +103,4 @@ function AppRouter() {
 }
 
 export default AppRouter
+
