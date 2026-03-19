@@ -5,8 +5,13 @@ import {
   Route,
   Routes,
 } from 'react-router-dom'
-import Home from './pages/Home'
-import GuessNumberGame from './pages/GuessNumberGame'
+import MinyoungPage from './pages/MinyoungPage'
+import MinyoungAlcoholCategory from './pages/MinyoungAlcoholCategory'
+import JieunPage from './pages/JieunPage'
+import YeonheePage from './pages/YeonheePage'
+import YeonheeAlcoholCategory from './pages/YeonheeAlcoholCategory'
+import BeerPourGame from './pages/BeerPourGame'
+import CreditGame from './pages/CreditGame'
 import './App.css'
 
 function AppRouter() {
@@ -37,19 +42,25 @@ function AppRouter() {
       </nav>
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/games/guess/minyoung"
-          element={<GuessNumberGame playerId="minyoung" playerName="민영님" />}
-        />
-        <Route
-          path="/games/guess/jieun"
-          element={<GuessNumberGame playerId="jieun" playerName="지은님" />}
-        />
-        <Route
-          path="/games/guess/yeonhee"
-          element={<GuessNumberGame playerId="yeonhee" playerName="연희님" />}
-        />
+        <Route path="/" element={<Navigate to="/minyoung" replace />} />
+
+        <Route path="/minyoung" element={<MinyoungPage />} />
+        <Route path="/minyoung/alcohol" element={<MinyoungAlcoholCategory />} />
+        <Route path="/minyoung/alcohol/beer" element={<BeerPourGame />} />
+
+        <Route path="/jieun" element={<JieunPage />} />
+        <Route path="/jieun/alcohol" element={<Navigate to="/jieun" replace />} />
+        <Route path="/jieun/alcohol/beer" element={<Navigate to="/jieun" replace />} />
+        <Route path="/jieun/credit" element={<CreditGame />} />
+
+        <Route path="/yeonhee" element={<YeonheePage />} />
+        <Route path="/yeonhee/alcohol" element={<YeonheeAlcoholCategory />} />
+        <Route path="/yeonhee/alcohol/beer" element={<BeerPourGame />} />
+
+        {/* 예전 경로 호환 */}
+        <Route path="/games/guess/minyoung" element={<Navigate to="/minyoung" replace />} />
+        <Route path="/games/guess/jieun" element={<Navigate to="/jieun" replace />} />
+        <Route path="/games/guess/yeonhee" element={<Navigate to="/yeonhee" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

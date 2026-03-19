@@ -9,8 +9,8 @@ function JieunPage() {
         <p>카테고리를 선택하세요.</p>
 
         <div className="home-actions">
-          <NavLink className="home-link" to="/jieun/alcohol">
-            술게임
+          <NavLink className="home-link" to="/jieun/credit">
+            학점받기게임
           </NavLink>
         </div>
       </div>
