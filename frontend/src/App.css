@@ -236,8 +236,8 @@
 /* iPhone 기준(대략 390px) */
 @media (max-width: 430px) {
   #center {
-    padding: 16px 12px 20px;
-    gap: 14px;
+    padding: 12px 10px 16px;
+    gap: 10px;
   }
 
   .hero {
@@ -330,4 +330,293 @@
     max-width: 260px;
     padding: 12px 14px;
   }
+}
+
+/* 맥주 따르기 게임 */
+.beer-game-shell {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.beer-game-board {
+  width: min(400px, 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 12px 12px;
+  box-sizing: border-box;
+  min-height: 85svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.beer-game {
+  padding: 2px 0 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.beer-game h1 {
+  font-size: 22px;
+  margin: 10px 0 6px;
+}
+
+.beer-sub {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.beer-setup {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.beer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.beer-tag {
+  font-family: var(--mono);
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--code-bg);
+}
+
+.beer-slider {
+  width: 320px;
+  max-width: 80vw;
+}
+
+.beer-cups {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin: 12px 0 8px;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+}
+
+.beer-cup {
+  width: 96px;
+  max-width: 30vw;
+  user-select: none;
+  position: relative;
+  cursor: pointer;
+}
+
+.beer-cup.active {
+  box-shadow: none;
+}
+
+/* 이미지 기반 컵/따르기 */
+.beer-pour-img {
+  width: 108px;
+  height: auto;
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cup-stage {
+  width: 96px;
+  height: 280px;
+  position: relative;
+  isolation: isolate;
+}
+
+.cup-mask {
+  position: absolute;
+  inset: 0;
+  /* 컵 이미지 알파를 마스크로 사용해 컵 안에서만 보이게 */
+  -webkit-mask-image: url('./assets/cup-empty.png');
+  mask-image: url('./assets/cup-empty.png');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  --fill: 0;
+  z-index: 10;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cup-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 20;
+  opacity: 1;
+}
+
+/* 컵 내부 맥주(차오름) */
+.cup-inner {
+  position: absolute;
+  /* 컵이 실제로 있는 영역만 사용 (이미지 기준) */
+  left: 11%;
+  right: 11%;
+  bottom: 5%;
+  height: 62%;
+  overflow: hidden;
+}
+
+.cup-liquid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--fill) * 1%);
+  border-radius: 0 0 16px 16px;
+  /* 더 진하고 불투명한 맥주색(단색 위주) */
+  background: #b56a00;
+  opacity: 1;
+  filter: saturate(1.65) contrast(1.25);
+  transition: height 60ms linear;
+  z-index: 10;
+}
+
+.cup-foam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12px;
+  bottom: calc(var(--fill) * 1% - 6px);
+  border-radius: 999px;
+  background: rgba(255, 245, 225, 0.95);
+  box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.55) inset;
+  pointer-events: none;
+  opacity: 0.9;
+  z-index: 11;
+}
+
+
+@keyframes streamFlow {
+  0% {
+    filter: saturate(1.05) brightness(1);
+    transform: translateX(-50%) scaleY(1) translateY(0);
+  }
+  50% {
+    filter: saturate(1.15) brightness(1.08);
+    transform: translateX(-50%) scaleY(1) translateY(2px);
+  }
+  100% {
+    filter: saturate(1.05) brightness(1);
+    transform: translateX(-50%) scaleY(1) translateY(0);
+  }
+}
+
+.beer-cup-label {
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-h);
+}
+
+.beer-result {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.beer-result-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--code-bg);
+}
+
+.beer-result-row.winner {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px rgba(170, 59, 255, 0.15);
+}
+
+.beer-result-name {
+  font-family: var(--mono);
+  color: var(--text-h);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.beer-win {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.beer-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+/* iPhone 기준(대략 390px) */
+@media (max-width: 430px) {
+  .beer-slider {
+    width: 260px;
+    max-width: 72vw;
+  }
+
+  .beer-game-board {
+    width: min(340px, 100%);
+    padding: 10px 10px;
+  }
+
+  .beer-cup {
+    width: 86px;
+    max-width: 46vw;
+  }
+
+  .cup-stage {
+    width: 86px;
+    height: 170px;
+  }
+
+  .beer-pour-img {
+    width: 84px;
+    top: -40px;
+  }
+
+  .beer-game h1 {
+    font-size: 20px;
+    margin: 8px 0 6px;
+  }
+
+  .beer-result-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.countdown {
+  font-size: 48px;
+  font-weight: bold;
+  color: var(--accent);
+  text-align: center;
+  width: 100%;
 }

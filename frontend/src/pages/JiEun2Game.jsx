@@ -126,6 +126,9 @@ const styles = {
     justifyContent: 'center',
     transition: 'background-color 0.2s, transform 0.1s',
     outline: 'none',
+    userSelect: 'none',
+    WebkitUserSelect: 'none',
+    touchAction: 'manipulation', // Optimize for touch
   },
 }
 
@@ -261,6 +264,7 @@ function JiEun2Game() {
     }
   }, [board, currentPiece, gameOver, isPlaying, checkCollision, lockPiece])
 
+
   // --- Hold Button Logic ---
   const latestDrop = useRef(drop)
   useEffect(() => { latestDrop.current = drop }, [drop])
@@ -275,8 +279,8 @@ function JiEun2Game() {
 
   const handleDropStart = (e) => {
     if (!isPlaying || gameOver) return
-    // Prevent default on touch to avoid scrolling/simulated mouse events if needed
-    // But allowing default click behavior might be needed if we used onClick, but we aren't.
+    
+    // Prevent default on touch to avoid scrolling/simulated mouse events
     if (e.type === 'touchstart' && e.cancelable) {
         e.preventDefault() 
     }
@@ -296,6 +300,11 @@ function JiEun2Game() {
   }
 
   const handleDropEnd = (e) => {
+    // Prevent default on touch end to avoid ghost clicks
+    if (e.type === 'touchend' && e.cancelable) {
+       e.preventDefault()
+    }
+
     if (dropIntervalRef.current) {
         clearInterval(dropIntervalRef.current)
         dropIntervalRef.current = null
@@ -304,6 +313,7 @@ function JiEun2Game() {
     e.currentTarget.style.backgroundColor = '#ffffff'
     e.currentTarget.style.transform = 'scale(1)'
   }
+
 
   // --- Game Loop ---
   useInterval(() => {
@@ -460,7 +470,6 @@ function JiEun2Game() {
         
         <button 
             style={styles.controlBtn} 
-            // Replace onClick with Hold Handlers
             onMouseDown={handleDropStart}
             onMouseUp={handleDropEnd}
             onMouseLeave={handleDropEnd}

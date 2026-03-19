@@ -1,7 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import reactLogo from '../assets/react.svg'
-import viteLogo from '../assets/vite.svg'
-import heroImg from '../assets/hero.png'
 
 function GuessNumberGame({ playerId = 'minyoung', playerName = '민영님' }) {
   const generateTarget = useMemo(() => {
@@ -93,11 +90,6 @@ function GuessNumberGame({ playerId = 'minyoung', playerName = '민영님' }) {
 
   return (
     <section id="center">
-      <div className="hero">
-        <img src={heroImg} className="base" width="170" height="179" alt="" />
-        <img src={reactLogo} className="framework" alt="React logo" />
-        <img src={viteLogo} className="vite" alt="Vite logo" />
-      </div>
       <div>
         <h1>{playerName} 숫자 맞추기 게임</h1>
         <p>1~100 사이 숫자를 맞혀보세요.</p>
