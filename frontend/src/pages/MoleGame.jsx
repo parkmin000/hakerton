@@ -1,117 +1,237 @@
 import { useState, useEffect, useRef } from 'react'
 import './pages.css'
 
+import catHead from '../assets/miru.png'
+import rabbitHead from '../assets/badharu.png'
+import boardImg from '../assets/back.png'
+import dudumainImg from '../assets/dudumain.png'
+import buttonImg from '../assets/button.png'
+
+const startBg = dudumainImg
+const startBtnBg = buttonImg
+
+const createEmptyMoles = () =>
+  Array(9)
+    .fill(null)
+    .map(() => ({ active: false, type: 'cat' }))
+
+const holes = [
+  { left: 25, top: 28 },
+  { left: 50, top: 28 },
+  { left: 75, top: 28 },
+
+  { left: 25, top: 44 },
+  { left: 50, top: 44 },
+  { left: 75, top: 44 },
+
+  { left: 25, top: 60 },
+  { left: 50, top: 60 },
+  { left: 75, top: 60 },
+]
+
 export default function MoleGame() {
   const [score, setScore] = useState(0)
+  const [highScore, setHighScore] = useState(() => {
+    return parseInt(localStorage.getItem('moleHighScore') || '0', 10)
+  })
   const [timeLeft, setTimeLeft] = useState(30)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [moles, setMoles] = useState(Array(9).fill(false))
+  const [moles, setMoles] = useState(createEmptyMoles())
+  const [hammer, setHammer] = useState({ visible: false, x: 0, y: 0 })
+
   const timerRef = useRef(null)
-  const moleTimerRef = useRef(null)
+  const spawnRef = useRef(null)
+  const hammerTimeoutRef = useRef(null)
 
   const startGame = () => {
     if (isPlaying) return
     setScore(0)
     setTimeLeft(30)
     setIsPlaying(true)
-    setMoles(Array(9).fill(false))
+    setMoles(createEmptyMoles())
+  }
+
+  const finishGame = (finalScore) => {
+    clearInterval(timerRef.current)
+    clearInterval(spawnRef.current)
+    setIsPlaying(false)
+    setMoles(createEmptyMoles())
+
+    setHighScore((prevHigh) => {
+      const nextHigh = Math.max(prevHigh, finalScore)
+      localStorage.setItem('moleHighScore', String(nextHigh))
+      return nextHigh
+    })
+
+    alert(`게임 종료! 최종 점수: ${finalScore}점`)
   }
 
   const endGame = () => {
-    setIsPlaying(false)
-    clearInterval(timerRef.current)
-    clearInterval(moleTimerRef.current)
-    setMoles(Array(9).fill(false))
-    alert(`게임 종료! 최종 점수: ${score}점`)
+    finishGame(score)
   }
 
   useEffect(() => {
-    if (isPlaying) {
-      timerRef.current = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            endGame()
-            return 0
-          }
-          return prev - 1
-        })
-      }, 1000)
+    if (!isPlaying) return
 
-      moleTimerRef.current = setInterval(() => {
-        const randomIndex = Math.floor(Math.random() * 9)
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          finishGame(score)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(timerRef.current)
+  }, [isPlaying, score])
+
+  useEffect(() => {
+    if (!isPlaying) return
+
+    const spawn = () => {
+      const randomIndex = Math.floor(Math.random() * 9)
+      const type = Math.random() > 0.2 ? 'cat' : 'rabbit'
+
+      setMoles((prev) => {
+        if (prev[randomIndex].active) return prev
+        const next = [...prev]
+        next[randomIndex] = { active: true, type }
+        return next
+      })
+
+      setTimeout(() => {
         setMoles((prev) => {
-          const newMoles = [...prev]
-          // 이미 두더지가 있는 곳이면 무시하거나 다른 곳을 찾을 수도 있음
-          // 간단하게 덮어쓰기
-          newMoles[randomIndex] = true
-          
-          // 0.7초 후에 사라지게 함
-          setTimeout(() => {
-            setMoles((current) => {
-              if (!current[randomIndex]) return current // 이미 잡혔으면 무시
-              const newer = [...current]
-              newer[randomIndex] = false
-              return newer
-            })
-          }, 700)
-          
-          return newMoles
+          const next = [...prev]
+          next[randomIndex] = { ...next[randomIndex], active: false }
+          return next
         })
-      }, 600 + Math.random() * 500) // 0.6~1.1초 간격으로 등장
+      }, 850)
     }
 
-    return () => {
-      clearInterval(timerRef.current)
-      clearInterval(moleTimerRef.current)
-    }
+    spawnRef.current = setInterval(spawn, 700)
+
+    return () => clearInterval(spawnRef.current)
   }, [isPlaying])
 
-  const whack = (index) => {
-    if (!isPlaying || !moles[index]) return
-    
-    // 점수 획득 및 두더지 사라짐
-    setScore((prev) => prev + 10)
+  const showHammer = (event) => {
+    const point =
+      event.touches && event.touches.length > 0 ? event.touches[0] : event
+
+    const rect = event.currentTarget.getBoundingClientRect()
+    const x = point.clientX - rect.left
+    const y = point.clientY - rect.top
+
+    setHammer({ visible: true, x, y })
+
+    if (hammerTimeoutRef.current) clearTimeout(hammerTimeoutRef.current)
+    hammerTimeoutRef.current = setTimeout(() => {
+      setHammer((prev) => ({ ...prev, visible: false }))
+    }, 180)
+  }
+
+  const whack = (index, event) => {
+    showHammer(event)
+
+    if (!isPlaying || !moles[index].active) return
+
+    const type = moles[index].type
+
+    if (type === 'cat') {
+      setScore((prev) => prev + 10)
+    } else {
+      setScore((prev) => prev - 30)
+    }
+
     setMoles((prev) => {
-      const newMoles = [...prev]
-      newMoles[index] = false
-      return newMoles
+      const next = [...prev]
+      next[index] = { ...next[index], active: false }
+      return next
     })
   }
 
   return (
-    <div className="mole-game-container">
-      <h1>🐹 두더지 잡기 🐹</h1>
-      
-      <div className="game-info">
-        <div className="score-board">점수: <span>{score}</span></div>
-        <div className="timer">시간: <span>{timeLeft}</span>초</div>
-      </div>
-      
-      {!isPlaying && (
-        <div className="start-screen">
-          <p>{timeLeft === 0 ? '게임 오버!' : '준비되셨나요?'}</p>
-          <button className="start-btn" onClick={startGame}>
-            {timeLeft === 0 ? '다시 시작' : '게임 시작'}
-          </button>
-        </div>
-      )}
+    <section id="center">
+      <div className="mole-game-shell">
+        <div
+          className="mole-game-board"
+          onMouseDown={!isPlaying ? undefined : showHammer}
+          onTouchStart={!isPlaying ? undefined : showHammer}
+        >
+          {!isPlaying ? (
+            <div
+              className="start-page"
+              style={{ backgroundImage: `url(${startBg})` }}
+            >
+              <div className="start-overlay">
+                <button className="game-start-btn" onClick={startGame}>
+                  <img src={startBtnBg} alt="게임 시작" />
+                </button>
+                <div className="high-score-tag">Best: {highScore}</div>
+              </div>
+            </div>
+          ) : (
+            <div className="play-scene">
+              <div className="mole-hud">
+                <div className="hud-item score">
+                  SCORE: <span>{score}</span>
+                </div>
+                <div className="hud-item timer">
+                  TIME: <span>{timeLeft}s</span>
+                </div>
+              </div>
 
-      <div className={`grid ${!isPlaying ? 'disabled' : ''}`}>
-        {moles.map((isMole, index) => (
-          <div 
-            key={index} 
-            className={`hole ${isMole ? 'active' : ''}`}
-            onMouseDown={() => whack(index)}
-          >
-            {isMole && <span className="mole">🐹</span>}
-            <div className="dirt"></div>
-          </div>
-        ))}
+              <div className="mole-board-wrapper">
+                <img src={boardImg} alt="board" className="board-base-img" />
+
+                {holes.map((hole, i) => {
+                  const mole = moles[i]
+
+                  return (
+                    <button
+                      key={i}
+                      className="hole-slot"
+                      style={{
+                        left: `${hole.left}%`,
+                        top: `${hole.top}%`,
+                      }}
+                      onMouseDown={(e) => whack(i, e)}
+                      onTouchStart={(e) => whack(i, e)}
+                    >
+                      <div className="hole-clip">
+                        <div
+                          className={`char-container ${mole.active ? 'up' : ''}`}
+                        >
+                          <img
+                            src={mole.type === 'cat' ? catHead : rabbitHead}
+                            alt={mole.type}
+                            className={`char-img ${mole.type}`}
+                          />
+                        </div>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+
+              <div className="play-footer">
+                <button className="mole-end-btn" onClick={endGame}>
+                  QUIT
+                </button>
+              </div>
+            </div>
+          )}
+
+          {hammer.visible && (
+            <div
+              className="hammer-effect"
+              style={{ left: hammer.x, top: hammer.y }}
+            >
+              🔨
+            </div>
+          )}
+        </div>
       </div>
-      
-      <div className="instructions">
-        <p>두더지가 나오면 클릭하세요! (+10점)</p>
-      </div>
-    </div>
+    </section>
   )
 }

@@ -1,3 +1,4 @@
+/* 공통 레이아웃 */
 .home-actions {
   margin-top: 16px;
   display: flex;
@@ -25,660 +26,248 @@
   border-color: var(--accent-border);
 }
 
-.home-link-sub {
-  margin-top: 3px;
-  font-size: 11px;
-  opacity: 0.85;
-}
-
-/* iPhone 기준(대략 390px) */
-@media (max-width: 430px) {
-  .home-link {
-    width: 100%;
-    max-width: 260px;
-  }
-}
-
-/* 두더지 게임 스타일 */
-.mole-game-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.mole-game-container h1 {
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.game-info {
-  display: flex;
-  justify-content: space-between;
+/* 두더지 잡기 게임 스타일 */
+.mole-game-shell {
   width: 100%;
-  max-width: 300px;
-  margin-bottom: 20px;
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-.score-board span, .timer span {
-  color: #d32f2f;
-  font-size: 1.4rem;
-}
-
-.start-screen {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.start-btn {
-  padding: 12px 24px;
-  font-size: 1.2rem;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.start-btn:hover {
-  background-color: #45a049;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  background-color: #8D6E63; /* 흙색 배경 */
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
-}
-
-.grid.disabled {
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-.hole {
-  width: 80px;
-  height: 80px;
-  background-color: #5D4037; /* 구멍 색 */
-  border-radius: 50%;
   display: flex;
-  align-items: flex-end; /* 두더지가 밑에서 올라오는 느낌 */
   justify-content: center;
-  cursor: pointer;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.mole-game-board {
+  width: min(400px, 100%);
+  min-height: 85svh;
+  background: #fdf6e3;
+  border-radius: 24px;
   overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
   position: relative;
-  box-shadow: inset 0 5px 10px rgba(0,0,0,0.5);
-}
-
-.dirt {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 10px;
-  background-color: #3E2723;
-  z-index: 1;
-}
-
-.mole {
-  font-size: 50px;
-  user-select: none;
-  z-index: 2;
-  animation: popUp 0.1s ease-out;
-  position: relative;
-  bottom: 15px;
-}
-
-@keyframes popUp {
-  0% { transform: translateY(100%); }
-  100% { transform: translateY(0); }
-}
-
-.instructions {
-  margin-top: 20px;
-  color: #666;
-  font-size: 0.9rem;
-}
-
-/* Stack Game 스타일 */
-.stack-game-container {
-  position: relative;
-  width: 100%;
-  height: 100vh; /* 전체 화면 */
-  overflow: hidden;
-  /* 남색 -> 보라 -> 석양 -> 연한 파랑 (우주 -> 밤하늘 -> 노을 -> 하늘) */
-  background: linear-gradient(
-    to bottom,
-    #0b0d17 0%,     /* 우주 (Deep Space) */
-    #241e4e 33%,    /* 밤하늘 (Midnight) */
-    #fd5e53 66%,    /* 노을 (Sunset) */
-    #87CEEB 100%    /* 하늘 (Sky) */
-  );
-  background-size: 100% 400%;
-  background-position-y: 100%;
-  transition: background-position-y 0.5s ease-out;
-  touch-action: none; 
-  cursor: pointer; 
-}
-
-.game-ui {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; 
-  z-index: 10;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-/* 점수 표시 */
-.score-container {
-  margin-top: 40px;
-  text-align: center;
-  pointer-events: none;
-}
-
-.score-display {
-  font-size: 5rem;
-  color: #fff;
-  font-weight: 900;
-  line-height: 1;
-  text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
-  margin: 0;
-}
-
-.combo-display {
-  font-size: 2rem;
-  color: #FFD700;
-  font-weight: bold;
-  font-style: italic;
-  text-shadow: 1px 1px 0 #d32f2f;
-  animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes popUp {
-  0% { transform: scale(0); opacity: 0; }
-  80% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* 시작 화면 */
-.start-screen-arcade {
+.start-page {
+  flex: 1;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.start-overlay {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.2); 
-  padding: 60px 20px 40px;
-  box-sizing: border-box;
-  pointer-events: auto;
+  background: rgba(0,0,0,0.05);
 }
 
-.title-area {
+.game-start-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s;
+  position: absolute;
+  bottom: 18%;
+}
+
+.game-start-btn:hover { transform: scale(1.05); }
+.game-start-btn:active { transform: scale(0.95); }
+
+.game-start-btn img {
+  width: 240px;
+  display: block;
+}
+
+.high-score-tag {
+  position: absolute;
+  bottom: 8%;
+  background: rgba(110, 74, 49, 0.85);
+  color: #fff7d6;
+  padding: 6px 20px;
+  border-radius: 20px;
+  font-size: 16px;
+  font-weight: 800;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+}
+
+/* 플레이 화면 */
+.play-scene {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background: #7ca644;
+}
+
+.mole-hud {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.hud-item {
+  flex: 1;
+  background: #fff;
+  padding: 10px;
+  border-radius: 12px;
   text-align: center;
-  margin-top: 40px;
+  font-weight: 900;
+  font-size: 16px;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+  color: #333;
 }
 
-.arcade-title {
-  font-family: 'Arial', sans-serif;
-  font-size: 3.5rem;
-  font-weight: 900;
-  color: #fff;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-  margin: 0;
-  margin-bottom: 10px;
+.hud-item span {
+  display: block;
+  font-size: 22px;
+  color: #e74c3c;
   line-height: 1.2;
 }
 
-.school-score {
-  font-size: 1.5rem;
-  color: #FFD700;
-  font-weight: bold;
-  margin: 0;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-}
-
-.touch-msg {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.8rem;
-  color: #fff;
-  font-weight: bold;
-  animation: blink 1.2s infinite ease-in-out;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-  white-space: nowrap;
-  pointer-events: none;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-/* 랭킹 버튼 (하단) */
-.ranking-btn {
-  padding: 12px 30px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #333;
-  background: #fff;
-  border: none;
-  border-radius: 30px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  cursor: pointer;
-  z-index: 20;
-  transition: transform 0.1s;
-  margin-bottom: 20px;
-}
-
-.ranking-btn:active {
-  transform: scale(0.95);
-}
-
-/* 랭킹 모달 */
-.ranking-modal-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
+/* 게임 보드 영역 (이미지 좌표 매칭형) */
+.mole-board-wrapper {
+  position: relative;
   width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 100;
-  backdrop-filter: blur(3px);
-}
-
-.ranking-board-modal {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-  width: 85%;
-  max-width: 320px;
-  text-align: center;
-  animation: popUp 0.3s ease-out;
-}
-
-.ranking-board-modal h3 {
-  margin-top: 0;
-  color: #333;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
-  font-size: 1.4rem;
-}
-
-.ranking-board-modal ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.ranking-board-modal li {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px dashed #ccc;
-  font-size: 1.1rem;
-  color: #555;
-}
-
-.ranking-board-modal li:last-child {
-  border-bottom: none;
-}
-
-.close-ranking-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  background: #f44336;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 100%;
-}
-
-
-
-.start-btn-main {
-  padding: 15px 40px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
-  background: linear-gradient(45deg, #FF6B6B, #FF8E53);
-  border: none;
-  border-radius: 50px;
-  box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-  cursor: pointer;
-  pointer-events: auto;
-  transition: transform 0.2s, box-shadow 0.2s;
-  text-transform: uppercase;
-}
-
-.start-btn-main:active {
-  transform: scale(0.95);
-  box-shadow: 0 2px 5px rgba(255, 107, 107, 0.3);
-}
-
-/* 게임 오버 화면 */
-.gameover-screen {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 40px;
+  max-width: 360px;
+  margin: 0 auto;
+  aspect-ratio: 768 / 1024;
   border-radius: 20px;
-  text-align: center;
-  color: #333;
-  pointer-events: auto;
-  margin-top: 100px;
-  border: 4px solid #fff;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-  min-width: 320px;
-  animation: fadeIn 0.5s ease-out;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.gameover-screen h2 {
-  font-size: 2.5rem;
-  color: #FF6B6B;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.final-score {
-  font-size: 6rem;
-  font-weight: 900;
-  color: #333;
-  line-height: 1;
-  margin-bottom: 20px;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  background: #f5f5f5;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 30px;
-  color: #666;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-}
-
-.restart-btn, .home-btn {
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
-  transition: opacity 0.2s;
-  font-size: 1rem;
-}
-
-.restart-btn {
-  background: #2F80ED;
-  color: white;
-  box-shadow: 0 4px 10px rgba(47, 128, 237, 0.3);
-}
-
-.home-btn {
-  background: #f0f0f0;
-  color: #555;
-}
-
-.restart-btn:hover, .home-btn:hover {
-  opacity: 0.8;
-}
-
-.canvas-container {
+.board-base-img {
   width: 100%;
   height: 100%;
-}
-.map-game-wrap {
-  width: min(980px, 100%);
-  margin: 0 auto;
-}
-
-.map-game-sub {
-  margin-top: 8px;
-}
-
-.map-game-error {
-  margin-top: 12px;
-  color: #f43f5e;
-  font-weight: 600;
-}
-
-.map-game-meta {
-  margin-top: 12px;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.map-game-stage {
-  position: relative;
-  margin-top: 14px;
-  min-height: 540px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  background: #f7f8fc;
-}
-
-.map-game-main {
-  height: 540px;
-  width: 100%;
-}
-
-.map-game-side {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 180px;
-  max-width: 44vw;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px;
-  box-sizing: border-box;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-
-.map-game-side h3 {
-  margin: 0 0 8px;
-  font-size: 16px;
-}
-
-.map-character-list {
-  list-style: none;
-  margin: 0 0 10px;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  text-align: left;
-}
-
-.map-character-list li {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: var(--text-h);
-}
-
-.map-character-list li.found {
-  opacity: 0.7;
-  text-decoration: line-through;
-}
-
-
-.map-game-result {
-  margin-top: 16px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px 14px;
-  background: var(--code-bg);
-}
-
-.map-haru-progress {
-  margin: 12px auto 0;
-  width: min(360px, 96%);
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  justify-items: center;
-}
-
-.map-haru-item {
-  width: 42px;
-  height: 42px;
+  display: block;
   object-fit: contain;
-  opacity: 0.28;
-  filter: grayscale(0.25) saturate(0.8);
-  transition: opacity 0.2s ease, filter 0.2s ease, transform 0.2s ease;
-}
-
-.map-haru-item.found {
-  opacity: 1;
-  filter: none;
-  transform: scale(1.04);
-}
-
-.mouse-avoid-wrap {
-  width: min(400px, 100%);
-  margin: 0 auto;
-}
-
-.mouse-avoid-sub {
-  margin-top: 6px;
-}
-
-.mouse-avoid-meta {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.mouse-avoid-field {
-  width: 100%;
-  height: 85svh;
-  min-height: 85svh;
-  margin: 14px auto 0;
-  position: relative;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12), transparent 30%),
-    linear-gradient(180deg, #222831 0%, #1b1f27 100%);
-}
-
-.mouse-player {
-  position: absolute;
-  border-radius: 999px;
-  background: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
-  transform: translate(-50%, -50%);
-}
-
-.white-mouse {
-  position: absolute;
   pointer-events: none;
-  transform: translate(-50%, -50%);
-}
-
-.white-mouse-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
   user-select: none;
-  pointer-events: none;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.35));
 }
 
-.mouse-overlay {
+/* 각 구멍 슬롯 */
+.hole-slot {
   position: absolute;
-  inset: 0;
+  transform: translate(-50%, -50%);
+  width: 20%;
+  height: 14%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  z-index: 2;
+  outline: none;
+}
+
+/* 구멍 안에서만 보이게 처리 */
+.hole-clip {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* 캐릭터 애니메이션 (bottom 이용) */
+.char-container {
+  position: absolute;
+  left: 50%;
+  bottom: -88%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 155%;
   display: flex;
-  align-items: center;
   justify-content: center;
-  flex-direction: column;
-  gap: 10px;
-  background: rgba(0, 0, 0, 0.35);
-  color: #fff;
+  align-items: flex-end;
+  transition: bottom 0.18s ease-out;
+  pointer-events: none;
 }
 
+.char-container.up {
+  bottom: -10%;
+}
+
+.char-img {
+  width: 78%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.28));
+  pointer-events: none;
+  user-select: none;
+}
+
+.char-img.cat {
+  width: 80%;
+}
+
+.char-img.rabbit {
+  width: 74%;
+}
+
+/* 망치 효과 */
+.hammer-effect {
+  position: absolute;
+  font-size: 55px;
+  pointer-events: none;
+  z-index: 1000;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  animation: hammerSwing 0.18s ease-out forwards;
+}
+
+@keyframes hammerSwing {
+  0% { transform: translate(-50%, -50%) rotate(0deg) scale(1.3); }
+  40% { transform: translate(-50%, -50%) rotate(-35deg) scale(1.1); }
+  100% { transform: translate(-50%, -50%) rotate(-50deg) scale(0.9); opacity: 0; }
+}
+
+.play-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  padding-top: 15px;
+}
+
+.mole-end-btn {
+  background: #c0392b;
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #922b21;
+}
+
+.mole-end-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #922b21;
+}
+
+/* 모바일 대응 */
 @media (max-width: 430px) {
-  .map-game-meta {
-    gap: 6px;
+  .mole-game-board {
+    width: min(340px, 100%);
+    min-height: 80svh;
   }
-
-  .map-game-stage {
-    min-height: 560px;
-  }
-
-  .map-game-main {
-    height: 560px;
-  }
-
-  .map-game-side {
-    top: 8px;
-    right: 8px;
-    width: 160px;
-    max-width: 52vw;
-    padding: 8px;
-  }
-
-  .map-game-side h3 {
-    font-size: 14px;
-    margin-bottom: 6px;
-  }
-
-  .map-character-list li {
-    font-size: 13px;
-  }
-
-  .map-haru-item {
-    width: 36px;
-    height: 36px;
-  }
-
-  .mouse-avoid-field {
-    height: 85svh;
-    min-height: 85svh;
-  }
+  
+  .hud-item { font-size: 14px; padding: 8px; }
+  .hud-item span { font-size: 18px; }
+  
+  .game-start-btn img { width: 200px; }
+  .high-score-tag { font-size: 14px; padding: 5px 15px; }
 }
-
