@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 import {
   BrowserRouter,
   Navigate,
-  NavLink,
   Route,
   Routes,
 } from 'react-router-dom'
@@ -47,31 +46,6 @@ function AppRouter() {
   return (
     <BrowserRouter>
       <audio ref={bgmRef} src="/effect.mp4" autoPlay loop preload="auto" hidden />
-      <nav className="app-nav">
-        <NavLink
-          to="/minyoung"
-          end
-          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-        >
-          민영 페이지
-        </NavLink>
-        <NavLink
-          to="/jieun"
-          end
-          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-        >
-          지은 페이지
-        </NavLink>
-        <NavLink
-          to="/yeonhee"
-          end
-          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-        >
-          연희 페이지
-        </NavLink>
-
-
-      </nav>
 
       <Routes>
         <Route path="/" element={<Home />} />

@@ -5,24 +5,27 @@ function Home() {
   return (
     <section id="center">
       <div>
-        <h1>게임 목록</h1>
-        <p>아래에서 게임을 선택하세요.</p>
-
         <div className="home-actions">
-          <NavLink className="home-link" to="/games/guess/minyoung">
-            민영님
+          <NavLink className="home-link" to="/minyoung">
+            맥주 따르기
           </NavLink>
-          <NavLink className="home-link" to="/games/guess/jieun">
-            지은님
+          <NavLink className="home-link" to="/minyoung/alcohol/map">
+            지도 게임
           </NavLink>
-          <NavLink className="home-link" to="/games/mole">
-            두더지 게임
+          <NavLink className="home-link" to="/yeonhee/stack">
+            블록쌓기
           </NavLink>
           <NavLink className="home-link" to="/games/guess/jieun2">
-            지은2님
+            테트리스
           </NavLink>
-          <NavLink className="home-link" to="/games/guess/yeonhee">
-            연희님
+          <NavLink className="home-link" to="/minyoung/alcohol/mouse">
+            피하기
+          </NavLink>
+          <NavLink className="home-link" to="/jieun/credit">
+            학점받기
+          </NavLink>
+          <NavLink className="home-link" to="/yeonhee/mole">
+            두더지잡기
           </NavLink>
         </div>
       </div>
