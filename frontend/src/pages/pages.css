@@ -134,7 +134,7 @@
   z-index: 2;
   animation: popUp 0.1s ease-out;
   position: relative;
-  bottom: -5px;
+  bottom: 15px;
 }
 
 @keyframes popUp {
