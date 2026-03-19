@@ -509,6 +509,72 @@
   background: var(--code-bg);
 }
 
+.mouse-avoid-wrap {
+  width: min(400px, 100%);
+  margin: 0 auto;
+}
+
+.mouse-avoid-sub {
+  margin-top: 6px;
+}
+
+.mouse-avoid-meta {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.mouse-avoid-field {
+  width: 100%;
+  height: 85svh;
+  min-height: 85svh;
+  margin: 14px auto 0;
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12), transparent 30%),
+    linear-gradient(180deg, #222831 0%, #1b1f27 100%);
+}
+
+.mouse-player {
+  position: absolute;
+  border-radius: 999px;
+  background: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+  transform: translate(-50%, -50%);
+}
+
+.white-mouse {
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.white-mouse-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.35));
+}
+
+.mouse-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+}
+
 @media (max-width: 430px) {
   .map-game-meta {
     gap: 6px;
@@ -544,6 +610,11 @@
     bottom: 8px;
     width: 160px;
     height: 124px;
+  }
+
+  .mouse-avoid-field {
+    height: 85svh;
+    min-height: 85svh;
   }
 }
 
