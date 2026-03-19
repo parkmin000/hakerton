@@ -5,6 +5,10 @@ import {
   Route,
   Routes,
 } from 'react-router-dom'
+import Home from './pages/Home'
+import GuessNumberGame from './pages/GuessNumberGame'
+import MoleGame from './pages/MoleGame'
+import StackGame from './pages/StackGame'
 import MinyoungPage from './pages/MinyoungPage'
 import MinyoungAlcoholCategory from './pages/MinyoungAlcoholCategory'
 import JieunPage from './pages/JieunPage'
@@ -41,6 +45,18 @@ function AppRouter() {
           지은님
         </NavLink>
         <NavLink
+          to="/games/mole"
+          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+        >
+          두더지 게임
+        </NavLink>
+        <NavLink
+          to="/games/stack"
+          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+        >
+          블록 쌓기
+        </NavLink>
+        <NavLink
           to="/games/guess/jieun2"
           className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
         >
@@ -70,8 +86,12 @@ function AppRouter() {
           element={<JiEun2Game />}
         />
         <Route
-          path="/games/guess/yeonhee"
-          element={<GuessNumberGame playerId="yeonhee" playerName="연희님" />}
+          path="/games/mole"
+          element={<MoleGame />}
+        />
+        <Route
+          path="/games/stack"
+          element={<StackGame />}
         />
         <Route path="/" element={<Navigate to="/minyoung" replace />} />
 
@@ -99,4 +119,3 @@ function AppRouter() {
 }
 
 export default AppRouter
-
