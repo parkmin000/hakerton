@@ -15,6 +15,9 @@ function Home() {
           <NavLink className="home-link" to="/games/guess/jieun">
             지은님
           </NavLink>
+          <NavLink className="home-link" to="/games/guess/jieun2">
+            지은2님
+          </NavLink>
           <NavLink className="home-link" to="/games/guess/yeonhee">
             연희님
           </NavLink>

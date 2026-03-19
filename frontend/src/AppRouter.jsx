@@ -8,6 +8,7 @@ import {
 import Home from './pages/Home'
 import GuessNumberGame from './pages/GuessNumberGame'
 import CreditGame from './pages/CreditGame'
+import JiEun2Game from './pages/JiEun2Game'
 import './App.css'
 
 function AppRouter() {
@@ -34,6 +35,12 @@ function AppRouter() {
           지은님
         </NavLink>
         <NavLink
+          to="/games/guess/jieun2"
+          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+        >
+          지은2님
+        </NavLink>
+        <NavLink
           to="/games/guess/yeonhee"
           className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
         >
@@ -50,6 +57,10 @@ function AppRouter() {
         <Route
           path="/games/guess/jieun"
           element={<CreditGame />}
+        />
+        <Route
+          path="/games/guess/jieun2"
+          element={<JiEun2Game />}
         />
         <Route
           path="/games/guess/yeonhee"
