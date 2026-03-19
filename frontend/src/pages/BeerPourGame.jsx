@@ -158,6 +158,11 @@ function BeerPourGame() {
     }, 1000);
   }
 
+  useEffect(() => {
+    if (stage === 'playing') {
+      setWaitingForNext(false);
+    }
+  }, [turn, stage]);
 
   return (
     <section id="center">
