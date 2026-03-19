@@ -4,11 +4,12 @@ import {
   Navigate,
   Route,
   Routes,
+  NavLink,
 } from 'react-router-dom'
 import MinyoungPage from './pages/MinyoungPage'
 import MinyoungAlcoholCategory from './pages/MinyoungAlcoholCategory'
 import JieunPage from './pages/JieunPage'
-import YeonheePage from './pages/yeonheePage'
+import YeonheePage from './pages/YeonheePage'
 
 import YeonheeAlcoholCategory from './pages/YeonheeAlcoholCategory'
 import BeerPourGame from './pages/BeerPourGame'
@@ -20,13 +21,7 @@ import GuessNumberGame from './pages/GuessNumberGame'
 import MoleGame from './pages/MoleGame'
 import StackGame from './pages/StackGame'
 import JiEun2Game from './pages/JiEun2Game'
-<<<<<<< HEAD
-import MoleGame from './pages/MoleGame'
 import Home from './pages/Home'
-import GuessNumberGame from './pages/GuessNumberGame'
-=======
-import Home from './pages/Home'
->>>>>>> 30ed612915d131a06140894ffacac73abcc4ea5b
 import './App.css'
 
 function AppRouter() {
@@ -51,39 +46,7 @@ function AppRouter() {
 
   return (
     <BrowserRouter>
-<<<<<<< HEAD
-      <nav className="app-nav">
-        <NavLink
-          to="/minyoung"
-          end
-          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-        >
-          민영 페이지
-        </NavLink>
-        <NavLink
-          to="/jieun"
-          end
-          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-        >
-          지은 페이지
-        </NavLink>
-        <NavLink
-          to="/yeonhee"
-          end
-          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-        >
-          두더지 게임
-        </NavLink>
-        <NavLink
-          to="/games/guess/jieun2"
-          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-        >
-          지은2님
-        </NavLink>
-      </nav>
-=======
       <audio ref={bgmRef} src="/effect.mp4" autoPlay loop preload="auto" hidden />
->>>>>>> 30ed612915d131a06140894ffacac73abcc4ea5b
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -121,17 +84,11 @@ function AppRouter() {
         <Route path="/jieun/alcohol/beer" element={<Navigate to="/jieun" replace />} />
         <Route path="/jieun/credit" element={<CreditGame />} />
 
-<<<<<<< HEAD
-        <Route path="/yeonhee" element={<MoleGame />} />
-        <Route path="/games/mole" element={<MoleGame />} />
-=======
-
         <Route path="/yeonhee" element={<YeonheePage />} />
         <Route path="/yeonhee/alcohol" element={<YeonheeAlcoholCategory />} />
         <Route path="/yeonhee/alcohol/beer" element={<BeerPourGame />} />
         <Route path="/yeonhee/stack" element={<StackGame />} />
         <Route path="/yeonhee/mole" element={<MoleGame />} />
->>>>>>> 30ed612915d131a06140894ffacac73abcc4ea5b
 
         {/* 예전 경로 호환 */}
         <Route path="/games/guess/minyoung" element={<Navigate to="/minyoung" replace />} />
