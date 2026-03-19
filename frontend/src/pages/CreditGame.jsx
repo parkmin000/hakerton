@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import './pages.css'
+import haruImgSrc from '../assets/haru.png'
+import angryImgSrc from '../assets/angry.png'
 
 // Game Constants
 const CANVAS_WIDTH = 400
@@ -9,6 +11,11 @@ const BASKET_HEIGHT = 50
 const ITEM_WIDTH = 50
 const ITEM_HEIGHT = 70
 const GAME_DURATION = 30 // seconds
+const HARU_SIZE = 54
+const ANGRY_SIZE = 54
+const APLUS_BONUS_DURATION = 5
+const F_BONUS_DURATION = 5
+const SPECIAL_SPAWN_INTERVAL = 15000
 
 const GRADES = [
   { label: 'A+', score: 100, color: '#FFD700' }, // Gold
@@ -42,7 +49,14 @@ class CreditGameLogic {
     this.animationId = null
     this.lastTime = 0
     this.spawnTimer = 0
+    this.specialSpawnTimer = 0
     this.timeLeft = GAME_DURATION // Initialize to show duration before start
+    this.aplusBonusLeft = 0
+    this.fBonusLeft = 0
+    this.haruImg = new Image()
+    this.haruImg.src = haruImgSrc
+    this.angryImg = new Image()
+    this.angryImg.src = angryImgSrc
 
     // Game parameters
     this.spawnInterval = 500 // ms
@@ -64,8 +78,11 @@ class CreditGameLogic {
     this.gameActive = true
     this.lastTime = performance.now()
     this.spawnTimer = 0
+    this.specialSpawnTimer = 0
     this.timeLeft = GAME_DURATION
     this.spawnInterval = 500
+    this.aplusBonusLeft = 0
+    this.fBonusLeft = 0
     
     this.onScoreChange(this.score)
     this.onTimeUpdate(this.timeLeft)
@@ -108,13 +125,19 @@ class CreditGameLogic {
   spawnItem() {
     // Weighted Random Selection
     // A+: 5%, A: 20%, B: 25%, C: 10%, F: 40%
-    const rand = Math.random() * 100
     let grade
-    if (rand < 5) grade = GRADES[0] // A+
-    else if (rand < 25) grade = GRADES[1] // A
-    else if (rand < 50) grade = GRADES[2] // B
-    else if (rand < 60) grade = GRADES[3] // C
-    else grade = GRADES[4] // F
+    if (this.fBonusLeft > 0) {
+      grade = GRADES[4]
+    } else if (this.aplusBonusLeft > 0) {
+      grade = GRADES[0]
+    } else {
+      const rand = Math.random() * 100
+      if (rand < 5) grade = GRADES[0] // A+
+      else if (rand < 25) grade = GRADES[1] // A
+      else if (rand < 50) grade = GRADES[2] // B
+      else if (rand < 60) grade = GRADES[3] // C
+      else grade = GRADES[4] // F
+    }
 
     const x = Math.random() * (this.width - ITEM_WIDTH)
     
@@ -124,12 +147,44 @@ class CreditGameLogic {
       width: ITEM_WIDTH,
       height: ITEM_HEIGHT,
       grade: grade,
+      type: 'grade',
       speed: this.baseSpeed * (0.9 + Math.random() * 0.2) 
+    })
+  }
+
+  spawnSpecialItem() {
+    const isAngry = Math.random() < 0.5
+    if (isAngry) {
+      const x = Math.random() * (this.width - ANGRY_SIZE)
+      this.items.push({
+        x,
+        y: -ANGRY_SIZE,
+        width: ANGRY_SIZE,
+        height: ANGRY_SIZE,
+        type: 'angry',
+        speed: this.baseSpeed * 1.02,
+      })
+      return
+    }
+    const x = Math.random() * (this.width - HARU_SIZE)
+    this.items.push({
+      x,
+      y: -HARU_SIZE,
+      width: HARU_SIZE,
+      height: HARU_SIZE,
+      type: 'haru',
+      speed: this.baseSpeed * 0.95,
     })
   }
 
   update(deltaTime) {
     const dt = deltaTime / 1000 // convert to seconds
+    if (this.aplusBonusLeft > 0) {
+      this.aplusBonusLeft = Math.max(0, this.aplusBonusLeft - dt)
+    }
+    if (this.fBonusLeft > 0) {
+      this.fBonusLeft = Math.max(0, this.fBonusLeft - dt)
+    }
 
     // Timer Logic
     this.timeLeft -= dt
@@ -147,6 +202,11 @@ class CreditGameLogic {
       this.spawnTimer = 0
       this.spawnItem()
     }
+    this.specialSpawnTimer += deltaTime
+    if (this.specialSpawnTimer > SPECIAL_SPAWN_INTERVAL) {
+      this.specialSpawnTimer = 0
+      this.spawnSpecialItem()
+    }
 
     // Update Items
     for (let i = this.items.length - 1; i >= 0; i--) {
@@ -161,8 +221,16 @@ class CreditGameLogic {
         item.y + item.height > this.basket.y
       ) {
         // Caught
-        this.score += item.grade.score
-        this.onScoreChange(this.score)
+        if (item.type === 'haru') {
+          this.aplusBonusLeft = APLUS_BONUS_DURATION
+          this.fBonusLeft = 0
+        } else if (item.type === 'angry') {
+          this.fBonusLeft = F_BONUS_DURATION
+          this.aplusBonusLeft = 0
+        } else {
+          this.score += item.grade.score
+          this.onScoreChange(this.score)
+        }
         this.items.splice(i, 1)
         continue
       }
@@ -181,6 +249,35 @@ class CreditGameLogic {
     // 2. Draw Items (behind UI, but in front of background)
     
     this.items.forEach(item => {
+      if (item.type === 'haru') {
+        if (this.haruImg.complete) {
+          this.ctx.drawImage(this.haruImg, item.x, item.y, item.width, item.height)
+        } else {
+          this.ctx.fillStyle = '#ffe8f1'
+          this.ctx.fillRect(item.x, item.y, item.width, item.height)
+          this.ctx.fillStyle = '#ff6fa9'
+          this.ctx.font = 'bold 18px sans-serif'
+          this.ctx.textAlign = 'center'
+          this.ctx.textBaseline = 'middle'
+          this.ctx.fillText('H', item.x + item.width / 2, item.y + item.height / 2)
+        }
+        return
+      }
+      if (item.type === 'angry') {
+        if (this.angryImg.complete) {
+          this.ctx.drawImage(this.angryImg, item.x, item.y, item.width, item.height)
+        } else {
+          this.ctx.fillStyle = '#ffe1e1'
+          this.ctx.fillRect(item.x, item.y, item.width, item.height)
+          this.ctx.fillStyle = '#d93025'
+          this.ctx.font = 'bold 18px sans-serif'
+          this.ctx.textAlign = 'center'
+          this.ctx.textBaseline = 'middle'
+          this.ctx.fillText('!', item.x + item.width / 2, item.y + item.height / 2)
+        }
+        return
+      }
+
       this.ctx.save()
       
       // Shadow for card
@@ -233,6 +330,15 @@ class CreditGameLogic {
     this.ctx.font = 'bold 20px sans-serif'
     this.ctx.fillText(`Score : ${this.score}`, this.width * 0.3, 90)
     this.ctx.fillText(`Time : ${Math.ceil(this.timeLeft)}`, this.width * 0.7, 90)
+    if (this.fBonusLeft > 0) {
+      this.ctx.fillStyle = '#d93025'
+      this.ctx.font = 'bold 18px sans-serif'
+      this.ctx.fillText(`F Curse ${Math.ceil(this.fBonusLeft)}s`, this.width / 2, 120)
+    } else if (this.aplusBonusLeft > 0) {
+      this.ctx.fillStyle = '#1d4ed8'
+      this.ctx.font = 'bold 18px sans-serif'
+      this.ctx.fillText(`A+ Bonus ${Math.ceil(this.aplusBonusLeft)}s`, this.width / 2, 120)
+    }
   }
 
   loop(timestamp) {
