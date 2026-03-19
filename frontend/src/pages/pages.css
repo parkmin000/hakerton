@@ -10,6 +10,7 @@
   text-decoration: none;
   font-family: var(--mono);
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 12px 18px;
@@ -24,11 +25,161 @@
   border-color: var(--accent-border);
 }
 
+.home-link-sub {
+  margin-top: 3px;
+  font-size: 11px;
+  opacity: 0.85;
+}
+
 /* iPhone 기준(대략 390px) */
 @media (max-width: 430px) {
   .home-link {
     width: 100%;
     max-width: 260px;
+  }
+}
+
+.map-game-wrap {
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.map-game-sub {
+  margin-top: 8px;
+}
+
+.map-game-error {
+  margin-top: 12px;
+  color: #f43f5e;
+  font-weight: 600;
+}
+
+.map-game-meta {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.map-game-stage {
+  position: relative;
+  margin-top: 14px;
+  min-height: 540px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f7f8fc;
+}
+
+.map-game-main {
+  height: 540px;
+  width: 100%;
+}
+
+.map-game-side {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 180px;
+  max-width: 44vw;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.map-game-side h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.map-character-list {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.map-character-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-h);
+}
+
+.map-character-list li.found {
+  opacity: 0.7;
+  text-decoration: line-through;
+}
+
+.map-game-mini-wrap {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 180px;
+  height: 140px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.map-game-mini {
+  width: 100%;
+  height: 100%;
+}
+
+.map-game-result {
+  margin-top: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 14px;
+  background: var(--code-bg);
+}
+
+@media (max-width: 430px) {
+  .map-game-meta {
+    gap: 6px;
+  }
+
+  .map-game-stage {
+    min-height: 560px;
+  }
+
+  .map-game-main {
+    height: 560px;
+  }
+
+  .map-game-side {
+    top: 8px;
+    right: 8px;
+    width: 160px;
+    max-width: 52vw;
+    padding: 8px;
+  }
+
+  .map-game-side h3 {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .map-character-list li {
+    font-size: 13px;
+  }
+
+  .map-game-mini-wrap {
+    right: 8px;
+    bottom: 8px;
+    width: 160px;
+    height: 124px;
   }
 }
 

@@ -12,6 +12,9 @@ function MinyoungAlcoholCategory() {
           <NavLink className="home-link" to="/minyoung/alcohol/beer">
             맥주 따르기
           </NavLink>
+          <NavLink className="home-link" to="/minyoung/alcohol/map">
+            지도 게임
+          </NavLink>
         </div>
       </div>
     </section>

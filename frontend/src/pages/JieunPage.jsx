@@ -10,7 +10,10 @@ function JieunPage() {
 
         <div className="home-actions">
           <NavLink className="home-link" to="/jieun/credit">
-            학점받기게임
+            학점받기
+          </NavLink>
+          <NavLink className="home-link" to="/games/guess/jieun2">
+            테트리스
           </NavLink>
         </div>
       </div>
