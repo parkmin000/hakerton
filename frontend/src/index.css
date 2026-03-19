@@ -109,3 +109,26 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* iPhone 기준(세로형) */
+@media (max-width: 430px) {
+  #root {
+    border-inline: none;
+    padding: 12px;
+    box-sizing: border-box;
+  }
+
+  h1 {
+    font-size: 30px;
+    letter-spacing: -0.8px;
+    margin: 16px 0;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  code {
+    font-size: 14px;
+  }
+}

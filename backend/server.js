@@ -9,7 +9,16 @@ app.use(cors())
 app.use(express.json())
 
 // 메모리 상 최고 기록(서버 재시작 시 초기화)
-let bestAttempts = null
+// key: playerId (minyoung/jieun/yeonhee 등)
+const bestAttemptsByPlayer = {}
+const allowedPlayers = new Set(['minyoung', 'jieun', 'yeonhee'])
+
+function normalizePlayer(player) {
+  if (typeof player !== 'string') return null
+  const trimmed = player.trim()
+  if (!allowedPlayers.has(trimmed)) return null
+  return trimmed
+}
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' })
@@ -23,10 +32,16 @@ app.get('/api/hello', (req, res) => {
 })
 
 app.get('/api/highscore', (req, res) => {
-  res.json({ bestAttempts })
+  const player = normalizePlayer(req.query?.player)
+  if (!player) return res.status(400).json({ error: '`player` is required' })
+
+  res.json({ bestAttempts: bestAttemptsByPlayer[player] ?? null })
 })
 
 app.post('/api/highscore', (req, res) => {
+  const player = normalizePlayer(req.body?.player)
+  if (!player) return res.status(400).json({ error: '`player` must be one of minyoung/jieun/yeonhee' })
+
   const attemptsRaw = req.body?.attempts
   const attempts = typeof attemptsRaw === 'string' ? Number(attemptsRaw) : attemptsRaw
 
@@ -34,11 +49,12 @@ app.post('/api/highscore', (req, res) => {
     return res.status(400).json({ error: '`attempts` must be a positive integer' })
   }
 
-  if (bestAttempts === null || attempts < bestAttempts) {
-    bestAttempts = attempts
+  const current = bestAttemptsByPlayer[player] ?? null
+  if (current === null || attempts < current) {
+    bestAttemptsByPlayer[player] = attempts
   }
 
-  res.json({ bestAttempts })
+  res.json({ bestAttempts: bestAttemptsByPlayer[player] })
 })
 
 // 404 처리
