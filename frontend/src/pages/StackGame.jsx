@@ -14,7 +14,57 @@ const CAMERA_LOOK_OFFSET = 1.5
 // 카메라의 실제 Y 위치 오프셋 (각도 결정)
 const CAMERA_POS_Y_OFFSET = 12 
 
-const COLORS = ['#FF4D4D', '#17C3B2', '#FFCB2B', '#A2DE96', '#3DCCDD']
+// 8개의 HSL 앵커 컬러 (Hue, Saturation, Lightness)
+// 채도를 높여 더 선명하고 쨍하게 (Saturation 100%), 밝기를 높여 화사하게 (Lightness 75~80)
+const ANCHOR_COLORS = [
+  { h: 50, s: 100, l: 75 },  // 화사한 노랑
+  { h: 80, s: 100, l: 75 },  // 화사한 연두
+  { h: 150, s: 100, l: 78 }, // 화사한 민트
+  { h: 180, s: 100, l: 78 }, // 화사한 청록
+  { h: 200, s: 100, l: 80 }, // 화사한 하늘
+  { h: 220, s: 100, l: 78 }, // 화사한 파랑
+  { h: 260, s: 100, l: 78 }, // 화사한 보라
+  { h: 320, s: 100, l: 80 }, // 화사한 분홍
+]
+
+const getBlockColor = (level) => {
+  // 몇 레벨마다 다음 앵커 컬러로 완전히 전환될지 설정
+  const LEVELS_PER_COLOR = 5 
+  
+  // 전체 색상 배열 길이
+  const totalAnchors = ANCHOR_COLORS.length
+  
+  // 현재 진행된 전체 사이클 상의 위치 (float)
+  const position = level / LEVELS_PER_COLOR
+  
+  // 현재 앵커 인덱스
+  const currentIndex = Math.floor(position) % totalAnchors
+  // 다음 앵커 인덱스
+  const nextIndex = (currentIndex + 1) % totalAnchors
+  
+  // 두 앵커 사이의 진행도 (0.0 ~ 1.0)
+  const t = position - Math.floor(position)
+  
+  const c1 = ANCHOR_COLORS[currentIndex]
+  const c2 = ANCHOR_COLORS[nextIndex]
+  
+  // Hue 보간 (자연스러운 회전을 위해)
+  let h1 = c1.h
+  let h2 = c2.h
+  
+  // 색상환에서 최단 거리로 이동하기 위해 보정
+  // 예: 350도에서 10도로 갈 때, -10이 아니라 370으로 계산하여 시계방향 회전
+  // 여기서는 단순히 순방향으로 흐르도록 처리 (마지막 -> 처음 연결 시 360 더하기)
+  if (nextIndex === 0 && currentIndex === totalAnchors - 1) {
+    h2 += 360
+  }
+
+  const h = h1 + (h2 - h1) * t
+  const s = c1.s + (c2.s - c1.s) * t
+  const l = c1.l + (c2.l - c1.l) * t
+  
+  return `hsl(${h % 360}, ${s}%, ${l}%)`
+}
 
 // --- Components ---
 
@@ -23,11 +73,7 @@ const StaticBlock = ({ position, size, color, isBase }) => {
   return (
     <mesh position={position}>
       <boxGeometry args={size} />
-      <meshStandardMaterial color={color} roughness={0.4} metalness={0.1} />
-      <lineSegments>
-        <edgesGeometry args={[new THREE.BoxGeometry(...size)]} />
-        <lineBasicMaterial color="black" linewidth={1} transparent opacity={0.2} />
-      </lineSegments>
+      <meshStandardMaterial color={color} roughness={1} metalness={0} />
       {isBase && (
         <mesh position={[0, -0.1, 0]}>
           <boxGeometry args={[size[0] + 0.2, 0.2, size[2] + 0.2]} />
@@ -63,11 +109,7 @@ const FallingPiece = ({ position, size, color, removeSelf }) => {
   return (
     <mesh ref={meshRef} position={position}>
       <boxGeometry args={size} />
-      <meshStandardMaterial color={color} transparent opacity={0.9} />
-      <lineSegments>
-        <edgesGeometry args={[new THREE.BoxGeometry(...size)]} />
-        <lineBasicMaterial color="black" linewidth={1} transparent opacity={0.3} />
-      </lineSegments>
+      <meshStandardMaterial color={color} transparent opacity={0.9} roughness={1} metalness={0} />
     </mesh>
   )
 }
@@ -103,16 +145,26 @@ const PerfectEffect = ({ position }) => {
 
 // 메인 게임 씬
 const GameScene = ({ gameState, setGameState, onScoreUpdate, onGameOver }) => {
-  const [stack, setStack] = useState([]) 
+  const [stack, setStack] = useState([{ 
+    position: [0, 0, 0], 
+    size: [INITIAL_SIZE, BOX_HEIGHT, INITIAL_SIZE], 
+    color: getBlockColor(0),
+    isBase: true
+  }]) 
   const [debris, setDebris] = useState([]) 
   const [effects, setEffects] = useState([]) 
   const [activeBlockInfo, setActiveBlockInfo] = useState(null) 
   
   const activeBlockRef = useRef(null) 
   const activeBlockData = useRef(null) 
-  const stackRef = useRef([]) 
+  const stackRef = useRef([{ 
+    position: [0, 0, 0], 
+    size: [INITIAL_SIZE, BOX_HEIGHT, INITIAL_SIZE], 
+    color: getBlockColor(0),
+    isBase: true
+  }]) 
 
-  const levelRef = useRef(0)
+  const levelRef = useRef(1) // Start 화면에서도 1레벨(베이스) 상태
   const comboRef = useRef(0)
   const maxComboRef = useRef(0)
   const perfectCountRef = useRef(0)
@@ -127,7 +179,7 @@ const GameScene = ({ gameState, setGameState, onScoreUpdate, onGameOver }) => {
 
   const createNewBlock = (prevBlock, level) => {
     const direction = level % 2 === 0 ? 'x' : 'z'
-    const color = COLORS[level % COLORS.length]
+    const color = getBlockColor(level)
     
     const prevPos = prevBlock ? prevBlock.position : [0, -BOX_HEIGHT, 0]
     const prevSize = prevBlock ? prevBlock.size : [INITIAL_SIZE, BOX_HEIGHT, INITIAL_SIZE]
@@ -152,13 +204,37 @@ const GameScene = ({ gameState, setGameState, onScoreUpdate, onGameOver }) => {
     }
   }
 
+  // 초기 카메라 설정 (Start 상태에서도 Playing과 동일하게)
+  useEffect(() => {
+    if (cameraRef.current) {
+      // Playing 상태와 동일한 구도 설정
+      cameraRef.current.position.set(20, CAMERA_POS_Y_OFFSET, 20)
+      const currentHeight = (stack.length - 1) * BOX_HEIGHT // 현재 쌓인 높이 기준
+      const targetLookAtY = currentHeight + CAMERA_LOOK_OFFSET
+      const targetY = targetLookAtY + (CAMERA_POS_Y_OFFSET - CAMERA_LOOK_OFFSET)
+      
+      // 만약 start 상태라면 기본 위치(0)를 바라보게 강제할 수도 있지만, 
+      // stack 기반으로 계산하면 자연스럽게 일치함.
+      // 여기서는 초기값이므로 0 높이 기준.
+      
+      cameraRef.current.position.y = targetY
+      cameraRef.current.lookAt(0, targetLookAtY - CAMERA_LOOK_OFFSET, 0) // lookAt Y 보정
+      // 위 lookAt 계산이 조금 복잡하므로, playing loop의 로직을 그대로 따르는 게 좋음.
+      // playing loop: lookAt(0, cameraY - (POS_OFFSET - LOOK_OFFSET), 0)
+      cameraRef.current.lookAt(0, targetY - (CAMERA_POS_Y_OFFSET - CAMERA_LOOK_OFFSET), 0)
+      
+      cameraRef.current.zoom = 55
+      cameraRef.current.updateProjectionMatrix()
+    }
+  }, []) // 마운트 시 1회 실행
+
   // 게임 초기화
   useEffect(() => {
     if (gameState === 'start_game_signal') {
       const initialBlock = { 
         position: [0, 0, 0], 
         size: [INITIAL_SIZE, BOX_HEIGHT, INITIAL_SIZE], 
-        color: COLORS[0],
+        color: getBlockColor(0),
         isBase: true
       }
       
@@ -178,6 +254,7 @@ const GameScene = ({ gameState, setGameState, onScoreUpdate, onGameOver }) => {
       activeBlockData.current = newBlock
       setActiveBlockInfo(newBlock)
       
+      // 카메라 리셋 (애니메이션 없이 즉시 이동)
       if (cameraRef.current) {
         cameraRef.current.position.set(20, CAMERA_POS_Y_OFFSET, 20)
         cameraRef.current.lookAt(0, CAMERA_LOOK_OFFSET, 0)
@@ -338,22 +415,10 @@ const GameScene = ({ gameState, setGameState, onScoreUpdate, onGameOver }) => {
     // 조명 업데이트 (낮 -> 우주)
     if (ambientLightRef.current && dirLightRef.current) {
       const progress = Math.min(1, levelRef.current / 50)
-      const targetAmbient = 0.8 - (0.5 * progress) // 0.8 -> 0.3
-      const targetDir = 1.0 - (0.6 * progress)     // 1.0 -> 0.4
+      const targetAmbient = 1.0 - (0.3 * progress) // 1.0 -> 0.7 (더 밝게 유지)
+      const targetDir = 0.6 - (0.3 * progress)     // 0.6 -> 0.3 (직사광 약하게)
       ambientLightRef.current.intensity = THREE.MathUtils.lerp(ambientLightRef.current.intensity, targetAmbient, 0.05)
       dirLightRef.current.intensity = THREE.MathUtils.lerp(dirLightRef.current.intensity, targetDir, 0.05)
-    }
-  })
-
-  // Start 화면 애니메이션
-  useFrame((state) => {
-    if (gameState === 'start' && cameraRef.current) {
-      const t = state.clock.getElapsedTime() * 0.3
-      const r = 25
-      cameraRef.current.position.set(Math.sin(t) * r, 15, Math.cos(t) * r)
-      cameraRef.current.lookAt(0, 5, 0)
-      cameraRef.current.zoom = 55
-      cameraRef.current.updateProjectionMatrix()
     }
   })
 
@@ -368,17 +433,17 @@ const GameScene = ({ gameState, setGameState, onScoreUpdate, onGameOver }) => {
         far={200}
       />
       
-      <ambientLight ref={ambientLightRef} intensity={0.8} />
-      <directionalLight ref={dirLightRef} position={[10, 25, 10]} intensity={1.0} castShadow />
+      <ambientLight ref={ambientLightRef} intensity={1.0} />
+      <directionalLight ref={dirLightRef} position={[10, 25, 10]} intensity={0.6} />
       
       {/* 부드러운 그림자 효과 - 바닥 밀착 */}
       <ContactShadows 
         position={[0, -0.45, 0]} 
-        opacity={0.5} 
+        opacity={0.6} 
         scale={30} 
         blur={2.5} 
         far={5} 
-        color="#000000"
+        color="#E0702B" 
       />
 
       {stack.map((block, i) => (
@@ -396,11 +461,7 @@ const GameScene = ({ gameState, setGameState, onScoreUpdate, onGameOver }) => {
       {activeBlockInfo && (
         <mesh ref={activeBlockRef} position={activeBlockInfo.position}>
           <boxGeometry args={activeBlockInfo.size} />
-          <meshStandardMaterial color={activeBlockInfo.color} />
-          <lineSegments>
-            <edgesGeometry args={[new THREE.BoxGeometry(...activeBlockInfo.size)]} />
-            <lineBasicMaterial color="black" linewidth={1} transparent opacity={0.4} />
-          </lineSegments>
+          <meshStandardMaterial color={activeBlockInfo.color} roughness={1} metalness={0} />
         </mesh>
       )}
 
@@ -416,6 +477,7 @@ const StackGame = () => {
   const [currentScore, setCurrentScore] = useState({ score: 0, combo: 0, maxCombo: 0 })
   const [highScores, setHighScores] = useState([])
   const [playerName, setPlayerName] = useState('')
+  const [showRanking, setShowRanking] = useState(false)
 
   useEffect(() => {
     let storedId = localStorage.getItem('stack_game_guest_id')
@@ -463,7 +525,11 @@ const StackGame = () => {
   }
 
   const handleScreenClick = (e) => {
-    if (e.target.closest('button') || e.target.closest('.ranking-board')) return
+    if (e.target.closest('button') || e.target.closest('.ranking-board-modal')) return
+    if (showRanking) {
+      setShowRanking(false)
+      return
+    }
     if (gameState === 'start') startGame()
   }
 
@@ -491,21 +557,32 @@ const StackGame = () => {
         {gameState === 'start' && (
           <div className="start-screen-arcade">
             <div className="title-area">
-              <h1 className="arcade-title">STACK<br/>BLOCK</h1>
-              <p className="touch-msg">TOUCH TO START</p>
+              <h1 className="arcade-title">블록쌓기 게임</h1>
+              <p className="school-score">학교 점수 : 0</p>
             </div>
             
-            <div className="ranking-board">
-              <h3>🏆 RANKING</h3>
-              <ul>
-                {highScores.slice(0, 5).map((h, i) => (
-                  <li key={i}>
-                    <span>{i+1}. {h.player}</span>
-                    <span>{h.score}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <p className="touch-msg">화면을 터치하세요</p>
+            
+            <button className="ranking-btn" onClick={(e) => {
+              e.stopPropagation()
+              setShowRanking(true)
+            }}>랭킹보기</button>
+
+            {showRanking && (
+              <div className="ranking-modal-overlay">
+                <div className="ranking-board-modal">
+                  <h3>🏆 RANKING</h3>
+                  <ul>
+                    {highScores.slice(0, 5).map((h, i) => (
+                      <li key={i}>
+                        <span>{i+1}. {h.player}</span>
+                        <span>{h.score}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
           </div>
         )}
 

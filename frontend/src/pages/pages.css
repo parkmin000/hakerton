@@ -154,15 +154,13 @@
   width: 100%;
   height: 100vh; /* 전체 화면 */
   overflow: hidden;
-  /* 우주 -> 밤하늘 -> 노을 -> 낮(하늘색) */
+  /* 남색 -> 보라 -> 석양 -> 연한 파랑 (우주 -> 밤하늘 -> 노을 -> 하늘) */
   background: linear-gradient(
     to bottom,
-    #000000 0%,     /* 우주 */
-    #0b0d17 25%,    /* 밤하늘 */
-    #2a144b 40%,    /* 초저녁 */
-    #ff6b6b 60%,    /* 노을 */
-    #87ceeb 80%,    /* 낮(하늘색) */
-    #87ceeb 100%
+    #0b0d17 0%,     /* 우주 (Deep Space) */
+    #241e4e 33%,    /* 밤하늘 (Midnight) */
+    #fd5e53 66%,    /* 노을 (Sunset) */
+    #87CEEB 100%    /* 하늘 (Sky) */
   );
   background-size: 100% 400%;
   background-position-y: 100%;
@@ -222,84 +220,144 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.3); /* 밝은 반투명 오버레이 */
-  backdrop-filter: blur(2px);
-  pointer-events: auto; /* 전체 클릭 가능하도록 */
-  padding: 20px;
+  background: rgba(0, 0, 0, 0.2); 
+  padding: 60px 20px 40px;
+  box-sizing: border-box;
+  pointer-events: auto;
 }
 
 .title-area {
-  margin-bottom: 40px;
   text-align: center;
+  margin-top: 40px;
 }
 
 .arcade-title {
-  font-family: 'Arial Black', sans-serif;
-  font-size: 4.5rem;
-  line-height: 0.9;
+  font-family: 'Arial', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 900;
   color: #fff;
-  text-transform: uppercase;
-  text-shadow: 
-    3px 3px 0 #56CCF2,
-    -1px -1px 0 #2F80ED;
-  transform: rotate(-3deg);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
   margin: 0;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.school-score {
+  font-size: 1.5rem;
+  color: #FFD700;
+  font-weight: bold;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 .touch-msg {
-  font-size: 1.5rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.8rem;
   color: #fff;
-  margin-top: 20px;
   font-weight: bold;
-  letter-spacing: 2px;
-  animation: blink 1.5s infinite;
-  text-shadow: 0 0 10px rgba(47, 128, 237, 0.5);
+  animation: blink 1.2s infinite ease-in-out;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 @keyframes blink {
-  50% { opacity: 0; }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
-.ranking-board {
-  background: rgba(255, 255, 255, 0.8);
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-  width: 100%;
-  max-width: 350px;
-  margin-bottom: 40px;
-}
-
-.ranking-board h3 {
-  color: #333;
-  text-align: center;
-  margin-bottom: 15px;
+/* 랭킹 버튼 (하단) */
+.ranking-btn {
+  padding: 12px 30px;
   font-size: 1.2rem;
-  text-transform: uppercase;
+  font-weight: bold;
+  color: #333;
+  background: #fff;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  cursor: pointer;
+  z-index: 20;
+  transition: transform 0.1s;
+  margin-bottom: 20px;
+}
+
+.ranking-btn:active {
+  transform: scale(0.95);
+}
+
+/* 랭킹 모달 */
+.ranking-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  backdrop-filter: blur(3px);
+}
+
+.ranking-board-modal {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  width: 85%;
+  max-width: 320px;
+  text-align: center;
+  animation: popUp 0.3s ease-out;
+}
+
+.ranking-board-modal h3 {
+  margin-top: 0;
+  color: #333;
   border-bottom: 2px solid #eee;
   padding-bottom: 10px;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
 }
 
-.ranking-board ul {
+.ranking-board-modal ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.ranking-board li {
+.ranking-board-modal li {
   display: flex;
   justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px dashed #ccc;
+  font-size: 1.1rem;
   color: #555;
-  padding: 8px 0;
-  font-size: 0.95rem;
-  border-bottom: 1px dashed #ddd;
 }
 
-.ranking-board li:last-child {
+.ranking-board-modal li:last-child {
   border-bottom: none;
 }
+
+.close-ranking-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+}
+
+
 
 .start-btn-main {
   padding: 15px 40px;
