@@ -11,6 +11,8 @@ import JieunPage from './pages/JieunPage'
 import YeonheePage from './pages/YeonheePage'
 import YeonheeAlcoholCategory from './pages/YeonheeAlcoholCategory'
 import BeerPourGame from './pages/BeerPourGame'
+import CampusMapGame from './pages/CampusMapGame'
+import WhiteMouseAvoidGame from './pages/WhiteMouseAvoidGame'
 import CreditGame from './pages/CreditGame'
 import JiEun2Game from './pages/JiEun2Game'
 import './App.css'
@@ -78,6 +80,8 @@ function AppRouter() {
         <Route path="/minyoung" element={<MinyoungPage />} />
         <Route path="/minyoung/alcohol" element={<MinyoungAlcoholCategory />} />
         <Route path="/minyoung/alcohol/beer" element={<BeerPourGame />} />
+        <Route path="/minyoung/alcohol/map" element={<CampusMapGame />} />
+        <Route path="/minyoung/alcohol/mouse" element={<WhiteMouseAvoidGame />} />
 
         <Route path="/jieun" element={<JieunPage />} />
         <Route path="/jieun/alcohol" element={<Navigate to="/jieun" replace />} />
