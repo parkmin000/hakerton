@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom'
 import Home from './pages/Home'
 import GuessNumberGame from './pages/GuessNumberGame'
+import CreditGame from './pages/CreditGame'
 import './App.css'
 
 function AppRouter() {
@@ -48,7 +49,7 @@ function AppRouter() {
         />
         <Route
           path="/games/guess/jieun"
-          element={<GuessNumberGame playerId="jieun" playerName="지은님" />}
+          element={<CreditGame />}
         />
         <Route
           path="/games/guess/yeonhee"
