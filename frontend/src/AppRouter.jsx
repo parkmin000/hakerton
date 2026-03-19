@@ -13,7 +13,6 @@ import MinyoungPage from './pages/MinyoungPage'
 import MinyoungAlcoholCategory from './pages/MinyoungAlcoholCategory'
 import JieunPage from './pages/JieunPage'
 import YeonheePage from './pages/YeonheePage'
-import YeonheeAlcoholCategory from './pages/YeonheeAlcoholCategory'
 import BeerPourGame from './pages/BeerPourGame'
 import CampusMapGame from './pages/CampusMapGame'
 import CreditGame from './pages/CreditGame'
@@ -43,33 +42,9 @@ function AppRouter() {
           end
           className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
         >
-          지은님
-        </NavLink>
-        <NavLink
-          to="/games/mole"
-          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-        >
-          두더지 게임
-        </NavLink>
-        <NavLink
-          to="/games/stack"
-          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-        >
-          블록 쌓기
-        </NavLink>
-        <NavLink
-          to="/games/guess/jieun2"
-          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-        >
-          지은2님
-        </NavLink>
-        <NavLink
-          to="/games/guess/yeonhee"
-          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-        >
-          연희님
           연희 페이지
         </NavLink>
+       
       </nav>
 
       <Routes>
@@ -107,8 +82,6 @@ function AppRouter() {
         <Route path="/jieun/credit" element={<CreditGame />} />
 
         <Route path="/yeonhee" element={<YeonheePage />} />
-        <Route path="/yeonhee/alcohol" element={<YeonheeAlcoholCategory />} />
-        <Route path="/yeonhee/alcohol/beer" element={<BeerPourGame />} />
 
         {/* 예전 경로 호환 */}
         <Route path="/games/guess/minyoung" element={<Navigate to="/minyoung" replace />} />
