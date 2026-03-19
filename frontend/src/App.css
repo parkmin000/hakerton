@@ -470,15 +470,17 @@
 
 .beer-cup.active {
   box-shadow: none;
+  width: 200px;
+  min-height: 360px;
 }
 
 /* 이미지 기반 컵/따르기 */
 .beer-pour-img {
-  width: 108px;
+  width: 300px;
   height: auto;
   position: absolute;
-  top: -60px;
-  left: 50%;
+  top: -130px;
+  left: 75%;
   transform: translateX(-50%);
   pointer-events: none;
   z-index: 2;
@@ -489,6 +491,7 @@
   height: 280px;
   position: relative;
   isolation: isolate;
+  margin: 0 auto;
 }
 
 .cup-mask {
@@ -581,6 +584,7 @@
   font-family: var(--mono);
   font-size: 13px;
   color: var(--text-h);
+  text-align: center;
 }
 
 .beer-result {
@@ -657,14 +661,19 @@
     max-width: 46vw;
   }
 
+  .beer-cup.active {
+    width: 170px;
+    min-height: 250px;
+  }
+
   .cup-stage {
     width: 86px;
     height: 170px;
   }
 
   .beer-pour-img {
-    width: 84px;
-    top: -40px;
+    width: 136px;
+    top: -70px;
   }
 
   .beer-game h1 {

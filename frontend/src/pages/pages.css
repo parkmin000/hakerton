@@ -1,33 +1,110 @@
+<<<<<<< HEAD
 /* 공통 레이아웃 */
+=======
+.home-hero {
+  width: min(980px, 96vw);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.home-title {
+  margin: 0;
+  font-size: clamp(38px, 4.6vw, 56px);
+  font-weight: 300;
+  color: #5e5e5e;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.home-subtitle {
+  margin: 12px 0 26px;
+  font-size: clamp(24px, 2.9vw, 38px);
+  font-weight: 300;
+  color: #676767;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+>>>>>>> 30ed612915d131a06140894ffacac73abcc4ea5b
 .home-actions {
-  margin-top: 16px;
+  margin-top: 8px;
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .home-link {
   text-decoration: none;
-  font-family: var(--mono);
+  font-family: var(--mono, 'Pretendard', sans-serif);
   display: inline-flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 12px 18px;
-  border-radius: 8px;
-  color: var(--text-h);
-  background: var(--accent-bg);
-  border: 2px solid transparent;
-  transition: border-color 0.2s;
+  padding: 8px 14px;
+  border-radius: 6px;
+  color: #666;
+  background: #efefef;
+  border: 1px solid #e2e2e2;
+  font-size: 13px;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
 }
 
 .home-link:hover {
-  border-color: var(--accent-border);
+  border-color: #cfcfcf;
+  background: #f6f6f6;
+  color: #505050;
 }
 
+<<<<<<< HEAD
 /* 두더지 잡기 게임 스타일 */
 .mole-game-shell {
+=======
+.home-link-sub {
+  margin-top: 3px;
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+/* iPhone 기준(대략 390px) */
+@media (max-width: 430px) {
+  .home-title {
+    font-size: 30px;
+  }
+
+  .home-subtitle {
+    font-size: 20px;
+    margin-bottom: 18px;
+  }
+
+  .home-link {
+    width: auto;
+    max-width: none;
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+}
+
+/* 두더지 게임 스타일 */
+.mole-game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.mole-game-container h1 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.game-info {
+  display: flex;
+  justify-content: space-between;
+>>>>>>> 30ed612915d131a06140894ffacac73abcc4ea5b
   width: 100%;
   display: flex;
   justify-content: center;
@@ -152,7 +229,114 @@
 .board-base-img {
   width: 100%;
   height: 100%;
+<<<<<<< HEAD
   display: block;
+=======
+}
+.map-game-wrap {
+  width: min(980px, 100%);
+  margin: 0 auto;
+}
+
+.map-game-sub {
+  margin-top: 8px;
+}
+
+.map-game-error {
+  margin-top: 12px;
+  color: #f43f5e;
+  font-weight: 600;
+}
+
+.map-game-meta {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.map-game-stage {
+  position: relative;
+  margin: 14px auto 0;
+  width: min(680px, 72%);
+  min-height: 540px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f7f8fc;
+}
+
+.map-game-main {
+  height: 540px;
+  width: 100%;
+}
+
+.map-game-side {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 180px;
+  max-width: 44vw;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.map-game-side h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.map-character-list {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.map-character-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-h);
+}
+
+.map-character-list li.found {
+  opacity: 0.7;
+  text-decoration: line-through;
+}
+
+
+.map-game-result {
+  margin-top: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 14px;
+  background: var(--code-bg);
+}
+
+.map-haru-progress {
+  margin: 12px auto 0;
+  width: min(360px, 96%);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  justify-items: center;
+}
+
+.map-haru-item {
+  width: 42px;
+  height: 42px;
+>>>>>>> 30ed612915d131a06140894ffacac73abcc4ea5b
   object-fit: contain;
   pointer-events: none;
   user-select: none;
@@ -197,6 +381,7 @@
   pointer-events: none;
 }
 
+<<<<<<< HEAD
 .char-container.up {
   bottom: -10%;
 }
@@ -263,6 +448,60 @@
   .mole-game-board {
     width: min(340px, 100%);
     min-height: 80svh;
+=======
+@media (max-width: 768px) {
+  .map-game-wrap {
+    width: 100%;
+  }
+
+  .map-game-stage {
+    width: 52vw !important;
+    min-width: 190px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 430px) {
+  .map-game-meta {
+    gap: 6px;
+  }
+
+  .map-game-stage {
+    width: 52vw !important;
+    min-height: 560px;
+  }
+
+  .map-game-main {
+    height: 560px;
+  }
+
+  .map-game-side {
+    top: 8px;
+    right: 8px;
+    width: 160px;
+    max-width: 52vw;
+    padding: 8px;
+  }
+
+  .map-game-side h3 {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .map-character-list li {
+    font-size: 13px;
+  }
+
+  .map-haru-item {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mouse-avoid-field {
+    height: 85svh;
+    min-height: 85svh;
+>>>>>>> 30ed612915d131a06140894ffacac73abcc4ea5b
   }
   
   .hud-item { font-size: 14px; padding: 8px; }

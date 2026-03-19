@@ -9,10 +9,10 @@ function YeonheePage() {
         <p>카테고리를 선택하세요.</p>
 
         <div className="home-actions">
-          <NavLink className="home-link" to="/games/mole">
+          <NavLink className="home-link" to="/yeonhee/mole">
             두더지잡기
           </NavLink>
-          <NavLink className="home-link" to="/games/stack">
+          <NavLink className="home-link" to="/yeonhee/stack">
             블록쌓기
           </NavLink>
         </div>

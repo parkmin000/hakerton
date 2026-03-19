@@ -1,28 +1,57 @@
+import { useEffect, useRef } from 'react'
 import {
   BrowserRouter,
   Navigate,
-  NavLink,
   Route,
   Routes,
 } from 'react-router-dom'
 import MinyoungPage from './pages/MinyoungPage'
 import MinyoungAlcoholCategory from './pages/MinyoungAlcoholCategory'
 import JieunPage from './pages/JieunPage'
-import YeonheePage from './pages/YeonheePage'
+import YeonheePage from './pages/yeonheePage'
+
 import YeonheeAlcoholCategory from './pages/YeonheeAlcoholCategory'
 import BeerPourGame from './pages/BeerPourGame'
 import CampusMapGame from './pages/CampusMapGame'
 import WhiteMouseAvoidGame from './pages/WhiteMouseAvoidGame'
 import CreditGame from './pages/CreditGame'
+
+import GuessNumberGame from './pages/GuessNumberGame'
+import MoleGame from './pages/MoleGame'
+import StackGame from './pages/StackGame'
 import JiEun2Game from './pages/JiEun2Game'
+<<<<<<< HEAD
 import MoleGame from './pages/MoleGame'
 import Home from './pages/Home'
 import GuessNumberGame from './pages/GuessNumberGame'
+=======
+import Home from './pages/Home'
+>>>>>>> 30ed612915d131a06140894ffacac73abcc4ea5b
 import './App.css'
 
 function AppRouter() {
+  const bgmRef = useRef(null)
+
+  useEffect(() => {
+    const audio = bgmRef.current
+    if (!audio) return undefined
+
+    const tryPlay = () => {
+      audio.play().catch(() => {})
+    }
+
+    // 자동재생이 막힌 브라우저에서도 첫 사용자 상호작용 후 재생 시작
+    window.addEventListener('pointerdown', tryPlay, { once: true })
+    window.addEventListener('keydown', tryPlay, { once: true })
+    return () => {
+      window.removeEventListener('pointerdown', tryPlay)
+      window.removeEventListener('keydown', tryPlay)
+    }
+  }, [])
+
   return (
     <BrowserRouter>
+<<<<<<< HEAD
       <nav className="app-nav">
         <NavLink
           to="/minyoung"
@@ -52,6 +81,9 @@ function AppRouter() {
           지은2님
         </NavLink>
       </nav>
+=======
+      <audio ref={bgmRef} src="/effect.mp4" autoPlay loop preload="auto" hidden />
+>>>>>>> 30ed612915d131a06140894ffacac73abcc4ea5b
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -67,6 +99,11 @@ function AppRouter() {
           path="/games/guess/jieun2"
           element={<JiEun2Game />}
         />
+        <Route
+          path="/games/stack"
+          element={<StackGame />}
+        />
+
         <Route
           path="/games/guess/yeonhee"
           element={<MoleGame />}
@@ -84,8 +121,17 @@ function AppRouter() {
         <Route path="/jieun/alcohol/beer" element={<Navigate to="/jieun" replace />} />
         <Route path="/jieun/credit" element={<CreditGame />} />
 
+<<<<<<< HEAD
         <Route path="/yeonhee" element={<MoleGame />} />
         <Route path="/games/mole" element={<MoleGame />} />
+=======
+
+        <Route path="/yeonhee" element={<YeonheePage />} />
+        <Route path="/yeonhee/alcohol" element={<YeonheeAlcoholCategory />} />
+        <Route path="/yeonhee/alcohol/beer" element={<BeerPourGame />} />
+        <Route path="/yeonhee/stack" element={<StackGame />} />
+        <Route path="/yeonhee/mole" element={<MoleGame />} />
+>>>>>>> 30ed612915d131a06140894ffacac73abcc4ea5b
 
         {/* 예전 경로 호환 */}
         <Route path="/games/guess/minyoung" element={<Navigate to="/minyoung" replace />} />

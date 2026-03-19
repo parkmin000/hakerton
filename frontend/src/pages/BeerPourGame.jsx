@@ -33,6 +33,11 @@ function BeerPourGame() {
 
   const [waitingForNext, setWaitingForNext] = useState(false);
   const [countdown, setCountdown] = useState(0);
+  const enterSfxRef = useRef(null);
+  const pouringSfxRef = useRef(null);
+  const enterAudioCtxRef = useRef(null);
+  const enterGainRef = useRef(null);
+  const enterSourceReadyRef = useRef(false);
 
   // 빠르게 차오르게(초당 퍼센트 증가) - 대학생 앱용으로 더 빠르게
   const speed = useMemo(() => 60, []);
@@ -40,6 +45,19 @@ function BeerPourGame() {
   useEffect(() => {
     fillRef.current = fill;
   }, [fill]);
+
+  useEffect(() => {
+    const pouringAudio = pouringSfxRef.current;
+    if (!pouringAudio) return;
+
+    if (running) {
+      pouringAudio.currentTime = 0;
+      pouringAudio.play().catch(() => {});
+    } else {
+      pouringAudio.pause();
+      pouringAudio.currentTime = 0;
+    }
+  }, [running]);
 
   useEffect(() => {
     if (!running) {
@@ -84,6 +102,31 @@ function BeerPourGame() {
     setStage('playing');
     setTurn(0);
 
+    const enterAudio = enterSfxRef.current;
+    if (enterAudio) {
+      if (!enterSourceReadyRef.current) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          const ctx = new AudioContextClass();
+          const source = ctx.createMediaElementSource(enterAudio);
+          const gain = ctx.createGain();
+          // 일반 audio.volume 최대치(1.0)를 넘어 증폭
+          gain.gain.value = 2.5;
+          source.connect(gain);
+          gain.connect(ctx.destination);
+          enterAudioCtxRef.current = ctx;
+          enterGainRef.current = gain;
+          enterSourceReadyRef.current = true;
+        }
+      }
+      if (enterAudioCtxRef.current?.state === 'suspended') {
+        enterAudioCtxRef.current.resume().catch(() => {});
+      }
+      enterAudio.volume = 1;
+      enterAudio.currentTime = 0;
+      enterAudio.play().catch(() => {});
+    }
+
     setFill(0);
     fillRef.current = 0;
     lastTsRef.current = 0;
@@ -91,10 +134,10 @@ function BeerPourGame() {
     setCountdown(3);
     const timer = setInterval(() => {
       setCountdown((prev) => {
-        if (prev === 1) {
+        if (prev === 0) {
           clearInterval(timer);
           setRunning(true);
-          return 0;
+          return -1;
         }
         return prev - 1;
       });
@@ -148,10 +191,10 @@ function BeerPourGame() {
     setCountdown(3);
     const timer = setInterval(() => {
       setCountdown((prev) => {
-        if (prev === 1) {
+        if (prev === 0) {
           clearInterval(timer);
           setRunning(true);
-          return 0;
+          return -1;
         }
         return prev - 1;
       });
@@ -161,6 +204,8 @@ function BeerPourGame() {
 
   return (
     <section id="center">
+      <audio ref={enterSfxRef} src="/beer-enter.mp3" preload="auto" hidden />
+      <audio ref={pouringSfxRef} src="/beer-enter.mp3" preload="auto" loop hidden />
       <div className="beer-game-shell">
         <div className="beer-game-board" style={{ background: 'transparent', backdropFilter: 'none', WebkitBackdropFilter: 'none' }}>
           <div className="beer-game">
@@ -172,9 +217,8 @@ function BeerPourGame() {
             <div className="beer-welcome-banner">
               <img className="beer-welcome-img" src={welcomeBgImg} alt="바텐더 환영 배경" />
               <p className="beer-welcome-bubble">
-                어서오세요. 에이비엠랩 바텐더에 오신걸 환영합니다.
-                <br />
-                목표 퍼센트와 플레이어 수를 정한 뒤 시작하세요. 각 플레이어 컵이 자동으로
+                목표 퍼센트와 플레이어 수를 정한 뒤 시작하세요.<br />
+                각 플레이어 컵이 자동으로
                 차오르고 탭하면 멈춰요.
               </p>
             </div>
@@ -207,9 +251,11 @@ function BeerPourGame() {
               />
             </div>
 
-            <button className="counter" type="button" onClick={startGame}>
-              시작
-            </button>
+             <div style={{ textAlign: 'center', marginTop: '20px' }}>
+              <button className="counter" type="button" onClick={startGame}>
+                시작
+              </button>
+            </div>
           </>
         ) : null}
 
@@ -222,11 +268,13 @@ function BeerPourGame() {
 
             <div className="beer-cups" style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
               {waitingForNext ? (
-                <button className="counter" type="button" onClick={nextPlayer}>
+                <button style={{ color: 'white' }} className="counter" type="button" onClick={nextPlayer}>
                   다음 플레이어
                 </button>
-              ) : countdown > 0 ? (
-                <div className="countdown">{countdown === 1 ? 'Start!' : countdown -1}</div>
+              ) : countdown >= 0 ? (
+                <div className="countdown" style={{ color: '#fff' }}>
+                  {countdown === 0 ? 'Start!' : countdown}
+                </div>
               ) : (
                 <div
                   className={`beer-cup active pouring`}

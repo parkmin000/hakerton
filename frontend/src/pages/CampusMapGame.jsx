@@ -11,7 +11,7 @@ const HIT_RADIUS_PX = 50
 const MAIN_MAP_LEVEL = 1 // 1이 가장 확대된 레벨
 const LIMIT_SEC = 60
 
-const CHARACTER_NAMES = Array.from({ length: CHARACTER_COUNT }).map((_, i) => `마루 ${i + 1}`)
+const CHARACTER_NAMES = Array.from({ length: CHARACTER_COUNT }).map((_, i) => `하루 ${i + 1}`)
 
 const toRad = (deg) => (deg * Math.PI) / 180
 const toDeg = (rad) => (rad * 180) / Math.PI
@@ -290,7 +290,7 @@ function CampusMapGame() {
   return (
     <section id="center">
       <div className="map-game-wrap">
-        <p className="map-game-sub">캠퍼스 안에 숨어있는 마루 10마리를 60초 안에 모두 찾아보세요.</p>
+        <p className="map-game-sub">캠퍼스 안에 숨어있는 하루 10마리를 60초 안에 모두 찾아보세요.</p>
 
         {error ? <p className="map-game-error">{error}</p> : null}
 
@@ -336,7 +336,7 @@ function CampusMapGame() {
           </div>
         )}
 
-        <div className="map-haru-progress" aria-label="찾은 마루 진행도">
+        <div className="map-haru-progress" aria-label="찾은 하루 진행도">
           {characters.map((c) => (
             <img
               key={c.id}
