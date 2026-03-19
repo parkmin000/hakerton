@@ -484,22 +484,6 @@
   text-decoration: line-through;
 }
 
-.map-game-mini-wrap {
-  position: absolute;
-  right: 14px;
-  bottom: 14px;
-  width: 180px;
-  height: 140px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  overflow: hidden;
-  background: #fff;
-}
-
-.map-game-mini {
-  width: 100%;
-  height: 100%;
-}
 
 .map-game-result {
   margin-top: 16px;
@@ -507,6 +491,30 @@
   border-radius: 12px;
   padding: 20px 14px;
   background: var(--code-bg);
+}
+
+.map-haru-progress {
+  margin: 12px auto 0;
+  width: min(360px, 96%);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  justify-items: center;
+}
+
+.map-haru-item {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  opacity: 0.28;
+  filter: grayscale(0.25) saturate(0.8);
+  transition: opacity 0.2s ease, filter 0.2s ease, transform 0.2s ease;
+}
+
+.map-haru-item.found {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.04);
 }
 
 .mouse-avoid-wrap {
@@ -605,11 +613,9 @@
     font-size: 13px;
   }
 
-  .map-game-mini-wrap {
-    right: 8px;
-    bottom: 8px;
-    width: 160px;
-    height: 124px;
+  .map-haru-item {
+    width: 36px;
+    height: 36px;
   }
 
   .mouse-avoid-field {
