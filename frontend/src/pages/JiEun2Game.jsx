@@ -3,7 +3,7 @@ import './pages.css'
 
 const COLS = 10
 const ROWS = 20
-const BLOCK_SIZE = 30
+const BLOCK_SIZE = 20
 const CANVAS_WIDTH = COLS * BLOCK_SIZE
 const CANVAS_HEIGHT = ROWS * BLOCK_SIZE
 
@@ -39,14 +39,14 @@ const COLORS = ['#A2E8FA', '#FFF4BD', '#D4C4FB', '#FFD4B2', '#AECBFA', '#B8EDD2'
 
 const styles = {
   container: {
-    minHeight: '100vh',
-    backgroundColor: '#f2f3f9',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-    padding: '20px',
+    padding: '8px 0 0',
+    width: '100%',
+    flex: 1,
     boxSizing: 'border-box',
   },
   header: {
@@ -67,16 +67,19 @@ const styles = {
   },
   boardContainer: {
     position: 'relative',
-    padding: '10px',
-    backgroundColor: '#ffffff',
+    padding: '0',
+    backgroundColor: 'transparent',
     borderRadius: '20px',
-    boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
-    marginBottom: '30px',
+    boxShadow: 'none',
+    marginBottom: '18px',
+    width: '100%',
   },
   canvas: {
     display: 'block',
+    width: '100%',
+    height: 'auto',
     borderRadius: '12px',
-    backgroundColor: '#fafafa',
+    backgroundColor: '#fff',
   },
   overlay: {
     position: 'absolute',
@@ -323,49 +326,58 @@ function JiEun2Game() {
   }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 style={styles.title}>시간표테트리스</h1>
-        <div style={styles.score}>Score : {score}</div>
-      </div>
+    <section id="center">
+      <div className="beer-game-shell">
+        <div
+          className="beer-game-board"
+          style={{ background: 'transparent', backdropFilter: 'none', WebkitBackdropFilter: 'none', minHeight: 'auto', paddingBottom: '12px' }}
+        >
+          <div style={styles.container}>
+            <div style={styles.header}>
+              <h1 style={styles.title}>시간표테트리스</h1>
+              <div style={styles.score}>Score : {score}</div>
+            </div>
 
-      <div style={styles.boardContainer}>
-        <canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} style={styles.canvas} />
+            <div style={styles.boardContainer}>
+              <canvas ref={canvasRef} width={CANVAS_WIDTH} height={CANVAS_HEIGHT} style={styles.canvas} />
 
-        {(gameOver || !isPlaying) && (
-          <div style={styles.overlay}>
-            <h2 style={styles.overlayTitle}>{gameOver ? 'Game Over' : 'Ready?'}</h2>
-            <button
-              onClick={handleStart}
-              style={styles.startButton}
-              onMouseOver={(e) => {
-                e.currentTarget.style.transform = 'scale(1.05)'
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.transform = 'scale(1)'
-              }}
-            >
-              {gameOver ? 'Try Again' : 'Start Game'}
-            </button>
+              {(gameOver || !isPlaying) && (
+                <div style={styles.overlay}>
+                  <h2 style={styles.overlayTitle}>{gameOver ? 'Game Over' : 'Ready?'}</h2>
+                  <button
+                    onClick={handleStart}
+                    style={styles.startButton}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.05)'
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)'
+                    }}
+                  >
+                    {gameOver ? 'Try Again' : 'Start Game'}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div style={styles.controls}>
+              <button style={styles.controlBtn} onClick={() => move(-1)} disabled={!isPlaying || gameOver}>
+                ←
+              </button>
+              <button style={styles.controlBtn} onClick={drop} disabled={!isPlaying || gameOver}>
+                ↓
+              </button>
+              <button style={styles.controlBtn} onClick={() => move(1)} disabled={!isPlaying || gameOver}>
+                →
+              </button>
+              <button style={styles.controlBtn} onClick={rotate} disabled={!isPlaying || gameOver}>
+                ↻
+              </button>
+            </div>
           </div>
-        )}
+        </div>
       </div>
-
-      <div style={styles.controls}>
-        <button style={styles.controlBtn} onClick={() => move(-1)} disabled={!isPlaying || gameOver}>
-          ←
-        </button>
-        <button style={styles.controlBtn} onClick={drop} disabled={!isPlaying || gameOver}>
-          ↓
-        </button>
-        <button style={styles.controlBtn} onClick={() => move(1)} disabled={!isPlaying || gameOver}>
-          →
-        </button>
-        <button style={styles.controlBtn} onClick={rotate} disabled={!isPlaying || gameOver}>
-          ↻
-        </button>
-      </div>
-    </div>
+    </section>
   )
 }
 

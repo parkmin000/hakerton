@@ -225,9 +225,9 @@ class CreditGameLogic {
     this.ctx.textBaseline = 'middle'
     
     // Title
-    this.ctx.font = '900 32px sans-serif'
+    this.ctx.font = '700 28px sans-serif'
     this.ctx.fillStyle = '#000'
-    this.ctx.fillText('학점받기게임', this.width / 2, 50)
+    this.ctx.fillText('학점올리기', this.width / 2, 50)
     
     // Score & Time
     this.ctx.font = 'bold 20px sans-serif'
@@ -281,47 +281,53 @@ function CreditGame() {
   }
 
   return (
-    <div className="credit-game-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
-      <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-        <canvas
-          ref={canvasRef}
-          width={CANVAS_WIDTH}
-          height={CANVAS_HEIGHT}
-          style={{ display: 'block', backgroundColor: '#f2f3f9', cursor: 'none' }}
-        />
-        {!isPlaying && (
-          <div style={{
-            position: 'absolute',
-            top: 0, left: 0, width: '100%', height: '100%',
-            backgroundColor: 'rgba(255,255,255,0.8)', // Lighter overlay
-            backdropFilter: 'blur(4px)',
-            display: 'flex', justifyContent: 'center', alignItems: 'center',
-            flexDirection: 'column', color: '#333'
-          }}>
-            <h2 style={{ marginBottom: '20px', fontSize: '24px' }}>
-              {timeLeft === 0 ? `Game Over` : 'Ready?'}
-            </h2>
-             {timeLeft === 0 && <p style={{ fontSize: '20px', marginBottom: '20px' }}>Final Score: <strong>{score}</strong></p>}
-            <button 
-              onClick={handleStart}
-              style={{ 
-                padding: '12px 30px', 
-                fontSize: '18px', 
-                fontWeight: 'bold',
-                cursor: 'pointer', 
-                backgroundColor: '#2E3B84', 
-                color: 'white',
-                border: 'none',
-                borderRadius: '25px',
-                boxShadow: '0 4px 6px rgba(0,0,0,0.2)'
-              }}
-            >
-              {timeLeft === 0 ? 'Play Again' : 'Start'}
-            </button>
+    <section id="center">
+      <div className="beer-game-shell">
+        <div className="beer-game-board">
+          <div className="credit-game-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'stretch', width: '100%', flex: 1, minHeight: '100%' }}>
+            <div style={{ position: 'relative', width: '100%', height: '100%', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+              <canvas
+                ref={canvasRef}
+                width={CANVAS_WIDTH}
+                height={CANVAS_HEIGHT}
+                style={{ display: 'block', width: '100%', height: '100%', backgroundColor: '#f2f3f9', cursor: 'none' }}
+              />
+              {!isPlaying && (
+                <div style={{
+                  position: 'absolute',
+                  top: 0, left: 0, width: '100%', height: '100%',
+                  backgroundColor: 'rgba(255,255,255,0.8)',
+                  backdropFilter: 'blur(4px)',
+                  display: 'flex', justifyContent: 'center', alignItems: 'center',
+                  flexDirection: 'column', color: '#333'
+                }}>
+                  <h2 style={{ marginBottom: '20px', fontSize: '24px' }}>
+                    {timeLeft === 0 ? `Game Over` : 'Ready?'}
+                  </h2>
+                  {timeLeft === 0 && <p style={{ fontSize: '20px', marginBottom: '20px' }}>Final Score: <strong>{score}</strong></p>}
+                  <button
+                    onClick={handleStart}
+                    style={{
+                      padding: '12px 30px',
+                      fontSize: '18px',
+                      fontWeight: 'bold',
+                      cursor: 'pointer',
+                      backgroundColor: '#2E3B84',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '25px',
+                      boxShadow: '0 4px 6px rgba(0,0,0,0.2)'
+                    }}
+                  >
+                    {timeLeft === 0 ? 'Play Again' : 'Start'}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        )}
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
 

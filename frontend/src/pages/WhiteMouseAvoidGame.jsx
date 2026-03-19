@@ -254,7 +254,7 @@ function WhiteMouseAvoidGame() {
 
           {gameOver ? (
             <div className="mouse-overlay">
-              <p>하얀쥐에게 닿아서 게임 끝!</p>
+              <p>하루에게 닿아서 게임 끝!</p>
               <button className="counter" type="button" onClick={resetGame}>
                 다시 하기
               </button>
