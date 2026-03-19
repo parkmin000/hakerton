@@ -525,7 +525,8 @@
 
 .map-game-stage {
   position: relative;
-  margin-top: 14px;
+  margin: 14px auto 0;
+  width: min(680px, 72%);
   min-height: 540px;
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -680,12 +681,26 @@
   color: #fff;
 }
 
+@media (max-width: 768px) {
+  .map-game-wrap {
+    width: 100%;
+  }
+
+  .map-game-stage {
+    width: 52vw !important;
+    min-width: 190px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 @media (max-width: 430px) {
   .map-game-meta {
     gap: 6px;
   }
 
   .map-game-stage {
+    width: 52vw !important;
     min-height: 560px;
   }
 
