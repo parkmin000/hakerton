@@ -210,7 +210,7 @@ function WhiteMouseAvoidGame() {
   return (
     <section id="center">
       <div className="mouse-avoid-wrap">
-        <p className="mouse-avoid-sub">커서를 움직여 파란 점을 조종하고 마루를 피하세요.</p>
+        <p className="mouse-avoid-sub">커서를 움직여 파란 점을 조종하고 하루를 피하세요.</p>
 
         <div className="mouse-avoid-meta">
           <span>
@@ -246,7 +246,7 @@ function WhiteMouseAvoidGame() {
 
           {!running && !gameOver ? (
             <div className="mouse-overlay">
-              <button className="counter" type="button" onClick={resetGame}>
+              <button style={{ color: 'white' }} className="counter" type="button" onClick={resetGame}>
                 시작하기
               </button>
             </div>
