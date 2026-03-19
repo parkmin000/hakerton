@@ -12,6 +12,7 @@ import YeonheePage from './pages/YeonheePage'
 import YeonheeAlcoholCategory from './pages/YeonheeAlcoholCategory'
 import BeerPourGame from './pages/BeerPourGame'
 import CreditGame from './pages/CreditGame'
+import JiEun2Game from './pages/JiEun2Game'
 import './App.css'
 
 function AppRouter() {
@@ -37,11 +38,41 @@ function AppRouter() {
           end
           className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
         >
+          지은님
+        </NavLink>
+        <NavLink
+          to="/games/guess/jieun2"
+          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+        >
+          지은2님
+        </NavLink>
+        <NavLink
+          to="/games/guess/yeonhee"
+          className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+        >
+          연희님
           연희 페이지
         </NavLink>
       </nav>
 
       <Routes>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/games/guess/minyoung"
+          element={<GuessNumberGame playerId="minyoung" playerName="민영님" />}
+        />
+        <Route
+          path="/games/guess/jieun"
+          element={<CreditGame />}
+        />
+        <Route
+          path="/games/guess/jieun2"
+          element={<JiEun2Game />}
+        />
+        <Route
+          path="/games/guess/yeonhee"
+          element={<GuessNumberGame playerId="yeonhee" playerName="연희님" />}
+        />
         <Route path="/" element={<Navigate to="/minyoung" replace />} />
 
         <Route path="/minyoung" element={<MinyoungPage />} />
