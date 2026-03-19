@@ -15,6 +15,7 @@ import JieunPage from './pages/JieunPage'
 import YeonheePage from './pages/YeonheePage'
 import YeonheeAlcoholCategory from './pages/YeonheeAlcoholCategory'
 import BeerPourGame from './pages/BeerPourGame'
+import CampusMapGame from './pages/CampusMapGame'
 import CreditGame from './pages/CreditGame'
 import JiEun2Game from './pages/JiEun2Game'
 import './App.css'
@@ -98,6 +99,7 @@ function AppRouter() {
         <Route path="/minyoung" element={<MinyoungPage />} />
         <Route path="/minyoung/alcohol" element={<MinyoungAlcoholCategory />} />
         <Route path="/minyoung/alcohol/beer" element={<BeerPourGame />} />
+        <Route path="/minyoung/alcohol/map" element={<CampusMapGame />} />
 
         <Route path="/jieun" element={<JieunPage />} />
         <Route path="/jieun/alcohol" element={<Navigate to="/jieun" replace />} />
@@ -111,7 +113,6 @@ function AppRouter() {
         {/* 예전 경로 호환 */}
         <Route path="/games/guess/minyoung" element={<Navigate to="/minyoung" replace />} />
         <Route path="/games/guess/jieun" element={<Navigate to="/jieun" replace />} />
-        <Route path="/games/guess/yeonhee" element={<Navigate to="/yeonhee" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
