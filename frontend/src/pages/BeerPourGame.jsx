@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import pourImg from '../assets/beer-pour.png';
 import cupEmptyImg from '../assets/cup-empty.png';
+import background from '../assets/background.png';
 
 function clampInt(n, min, max) {
   const v = Math.round(n);
@@ -137,6 +138,7 @@ function BeerPourGame() {
   }
 
   function nextPlayer() {
+    setWaitingForNext(false);
     setTurn((prev) => prev + 1);
     setFill(0);
     fillRef.current = 0;
@@ -155,17 +157,11 @@ function BeerPourGame() {
     }, 1000);
   }
 
-  useEffect(() => {
-    if (stage === 'playing') {
-      setWaitingForNext(false);
-    }
-  }, [turn, stage]);
-
 
   return (
     <section id="center">
       <div className="beer-game-shell">
-        <div className="beer-game-board">
+        <div className="beer-game-board" style={{ background: 'transparent', backdropFilter: 'none', WebkitBackdropFilter: 'none' }}>
           <div className="beer-game">
         {stage === 'setup' ? (
           <>
@@ -216,7 +212,7 @@ function BeerPourGame() {
               맥주 컵이 <code>자동으로 차오릅니다</code>. 원하는 순간에 컵을 <code>탭</code>해서 멈춰주세요.
             </p>
 
-            <div className="beer-cups">
+            <div className="beer-cups" style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
               {waitingForNext ? (
                 <button className="counter" type="button" onClick={nextPlayer}>
                   다음 플레이어
@@ -239,12 +235,11 @@ function BeerPourGame() {
                   ) : null}
 
                   <div className="cup-stage" aria-hidden="true">
-                    <div className="cup-mask">
-                      <div
-                        className="cup-liquid"
-                        style={{ height: `${fill}%` }}
-                      />
-                      <div className="cup-foam" style={{ bottom: `calc(${fill}% - 6px)` }} />
+                    <div className="cup-mask" style={{ '--fill': fill }}>
+                      <div className="cup-inner">
+                        <div className="cup-liquid" />
+                        <div className="cup-foam" />
+                      </div>
                     </div>
                     <img className="cup-img" src={cupEmptyImg} alt="" />
                   </div>

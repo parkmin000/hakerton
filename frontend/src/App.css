@@ -418,7 +418,7 @@
 }
 
 .beer-cup.active {
-  box-shadow: 0 0 0 3px rgba(170, 59, 255, 0.15);
+  box-shadow: none;
 }
 
 /* 이미지 기반 컵/따르기 */
@@ -437,6 +437,7 @@
   width: 96px;
   height: 280px;
   position: relative;
+  isolation: isolate;
 }
 
 .cup-mask {
@@ -451,6 +452,10 @@
   mask-position: center;
   -webkit-mask-size: contain;
   mask-size: contain;
+  --fill: 0;
+  z-index: 10;
+  pointer-events: none;
+  overflow: hidden;
 }
 
 .cup-img {
@@ -460,35 +465,50 @@
   height: 100%;
   object-fit: contain;
   pointer-events: none;
+  z-index: 20;
+  opacity: 1;
 }
 
 /* 컵 내부 맥주(차오름) */
+.cup-inner {
+  position: absolute;
+  /* 컵이 실제로 있는 영역만 사용 (이미지 기준) */
+  left: 11%;
+  right: 11%;
+  bottom: 5%;
+  height: 62%;
+  overflow: hidden;
+}
+
 .cup-liquid {
   position: absolute;
-  left: 14%;
-  right: 14%;
-  bottom: 8%;
-  height: 0%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(var(--fill) * 1%);
   border-radius: 0 0 16px 16px;
-  background: linear-gradient(
-    to top,
-    rgba(210, 166, 121, 0.98),
-    rgba(232, 193, 110, 0.98)
-  );
+  /* 더 진하고 불투명한 맥주색(단색 위주) */
+  background: #b56a00;
+  opacity: 1;
+  filter: saturate(1.65) contrast(1.25);
   transition: height 60ms linear;
+  z-index: 10;
 }
 
 .cup-foam {
   position: absolute;
-  left: 14%;
-  right: 14%;
+  left: 0;
+  right: 0;
   height: 12px;
+  bottom: calc(var(--fill) * 1% - 6px);
   border-radius: 999px;
   background: rgba(255, 245, 225, 0.95);
   box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.55) inset;
   pointer-events: none;
   opacity: 0.9;
+  z-index: 11;
 }
+
 
 @keyframes streamFlow {
   0% {
