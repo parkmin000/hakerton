@@ -91,10 +91,10 @@ function BeerPourGame() {
     setCountdown(3);
     const timer = setInterval(() => {
       setCountdown((prev) => {
-        if (prev === 1) {
+        if (prev === 0) {
           clearInterval(timer);
           setRunning(true);
-          return 0;
+          return -1;
         }
         return prev - 1;
       });
@@ -148,10 +148,10 @@ function BeerPourGame() {
     setCountdown(3);
     const timer = setInterval(() => {
       setCountdown((prev) => {
-        if (prev === 1) {
+        if (prev === 0) {
           clearInterval(timer);
           setRunning(true);
-          return 0;
+          return -1;
         }
         return prev - 1;
       });
@@ -172,9 +172,8 @@ function BeerPourGame() {
             <div className="beer-welcome-banner">
               <img className="beer-welcome-img" src={welcomeBgImg} alt="바텐더 환영 배경" />
               <p className="beer-welcome-bubble">
-                어서오세요. 에이비엠랩 바텐더에 오신걸 환영합니다.
-                <br />
-                목표 퍼센트와 플레이어 수를 정한 뒤 시작하세요. 각 플레이어 컵이 자동으로
+                목표 퍼센트와 플레이어 수를 정한 뒤 시작하세요.<br />
+                각 플레이어 컵이 자동으로
                 차오르고 탭하면 멈춰요.
               </p>
             </div>
@@ -207,9 +206,11 @@ function BeerPourGame() {
               />
             </div>
 
-            <button className="counter" type="button" onClick={startGame}>
-              시작
-            </button>
+             <div style={{ textAlign: 'center', marginTop: '20px' }}>
+              <button className="counter" type="button" onClick={startGame}>
+                시작
+              </button>
+            </div>
           </>
         ) : null}
 
@@ -222,11 +223,13 @@ function BeerPourGame() {
 
             <div className="beer-cups" style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
               {waitingForNext ? (
-                <button className="counter" type="button" onClick={nextPlayer}>
+                <button style={{ color: 'white' }} className="counter" type="button" onClick={nextPlayer}>
                   다음 플레이어
                 </button>
-              ) : countdown > 0 ? (
-                <div className="countdown">{countdown === 1 ? 'Start!' : countdown -1}</div>
+              ) : countdown >= 0 ? (
+                <div className="countdown" style={{ color: '#fff' }}>
+                  {countdown === 0 ? 'Start!' : countdown}
+                </div>
               ) : (
                 <div
                   className={`beer-cup active pouring`}
