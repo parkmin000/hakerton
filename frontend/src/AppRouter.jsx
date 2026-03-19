@@ -19,6 +19,7 @@ import CreditGame from './pages/CreditGame'
 import GuessNumberGame from './pages/GuessNumberGame'
 import MoleGame from './pages/MoleGame'
 import StackGame from './pages/StackGame'
+import JiEun2Game from './pages/JiEun2Game'
 import Home from './pages/Home'
 import './App.css'
 
@@ -60,6 +61,10 @@ function AppRouter() {
         <Route
           path="/games/guess/jieun"
           element={<CreditGame />}
+        />
+        <Route
+          path="/games/guess/jieun2"
+          element={<JiEun2Game />}
         />
         <Route
           path="/games/stack"
