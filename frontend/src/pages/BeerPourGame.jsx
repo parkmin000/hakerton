@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import pourImg from '../assets/beer-pour.png';
 import cupEmptyImg from '../assets/cup-empty.png';
 import background from '../assets/background.png';
+import welcomeBgImg from '../assets/welcomesul.jpg';
 
 function clampInt(n, min, max) {
   const v = Math.round(n);
@@ -166,10 +167,17 @@ function BeerPourGame() {
         {stage === 'setup' ? (
           <>
             <h1>맥주 따르기 술게임</h1>
-            <p className="beer-sub">
-              목표 퍼센트와 플레이어 수를 정한 뒤 시작하세요. 각 플레이어 컵이{' '}
-              <code>자동으로 차오르고</code> 탭하면 멈춰요.
-            </p>
+
+
+            <div className="beer-welcome-banner">
+              <img className="beer-welcome-img" src={welcomeBgImg} alt="바텐더 환영 배경" />
+              <p className="beer-welcome-bubble">
+                어서오세요. 에이비엠랩 바텐더에 오신걸 환영합니다.
+                <br />
+                목표 퍼센트와 플레이어 수를 정한 뒤 시작하세요. 각 플레이어 컵이 자동으로
+                차오르고 탭하면 멈춰요.
+              </p>
+            </div>
 
             <div className="beer-setup">
               <div className="beer-row">

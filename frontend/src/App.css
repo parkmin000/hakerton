@@ -344,9 +344,12 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0.38)),
+    url('./assets/welcomesul.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   padding: 12px 12px;
   box-sizing: border-box;
   min-height: 85svh;
@@ -370,6 +373,54 @@
   margin-top: 6px;
   font-size: 14px;
   line-height: 1.35;
+}
+
+.beer-welcome-banner {
+  margin: 10px auto 2px;
+  border-radius: 12px;
+  background: #111;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.beer-welcome-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.beer-welcome-bubble {
+  position: absolute;
+  top: auto;
+  bottom: 12px;
+  right: 8px;
+  max-width: 66%;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #1f1f1f;
+  font-size: 11px;
+  line-height: 1.32;
+  text-align: left;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.beer-welcome-bubble::after {
+  content: '';
+  position: absolute;
+  left: auto;
+  right: 18px;
+  top: -7px;
+  width: 10px;
+  height: 10px;
+  transform: rotate(45deg);
+  background: rgba(255, 255, 255, 0.94);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .beer-setup {
@@ -577,6 +628,20 @@
 
 /* iPhone 기준(대략 390px) */
 @media (max-width: 430px) {
+  .beer-welcome-banner {
+    width: min(300px, 92%);
+    height: 154px;
+  }
+
+  .beer-welcome-bubble {
+    top: auto;
+    bottom: 8px;
+    right: 6px;
+    max-width: 72%;
+    font-size: 10px;
+    padding: 6px 7px;
+  }
+
   .beer-slider {
     width: 260px;
     max-width: 72vw;
